@@ -1,6 +1,6 @@
 # AZ9tumas — Portfolio
 
-A zero-build, config-driven portfolio designed for **GitHub Pages**. Pure HTML/CSS/JS — no dependencies, no build step.
+A zero-build, config-driven portfolio designed for **GitHub Pages**. Pure HTML/CSS/JS — no dependencies, no build step, fully static output.
 
 ## Editing content
 
@@ -8,15 +8,23 @@ Everything is controlled from **[config.js](config.js)** — you never need to t
 
 | What | Where in config.js |
 |---|---|
-| Name, monogram, role, availability | `developer` |
-| Hero headline & subline | `developer.heroTitle` / `heroSub` (wrap a word in `**stars**` for the gradient highlight) |
-| Discord / email / payments | `contact` (email is stored split as `emailUser` + `emailDomain` so bots can't scrape it — it only assembles on button click) |
-| Games | `games` array — copy the commented TEMPLATE block to add one |
-| Videos | `showcase` array — copy the TEMPLATE block; give an entry **two or more videos** and it automatically renders a series toggle |
+| Name, monogram, tagline, availability | `profile` |
+| Hero headline, subline, stat band | `profile.heroHeadline` / `heroSub` / `heroStats` |
+| Discord / email / payment note | `contact` (email is stored split as `emailUser` + `emailDomain`; it is only assembled in the browser when "Reveal email" is clicked and never appears in the rendered DOM before that) |
+| Projects | `projects` array — append an object to add a card; set `featured: true` on exactly one to make it the large lead card |
+| Videos / case studies | `caseStudies` array — append an object; give an entry **two or more `parts`** and it renders as one cohesive unit with a chapter switcher; entries sharing a `category` group together automatically |
 | Frameworks & skills | `frameworks` / `skills` |
 | Tab title & SEO description | `seo` |
 
-Auto-computed for you (usable as `{tokens}` in any text): years of experience from `startYear`, combined visits summed from every game's `visits`, and total titles.
+Text tokens usable in any string: `{name}` and `{years}` (auto-computed from `profile.startYear`).
+
+### Credit accuracy
+
+Every project and case study carries a `role` badge stating the exact scope of the contribution ("Core Contributor", "Solo Developer", "Refactoring Engineer", "Front-End Scripter", "Contributor"). Keep these truthful when editing — precise credit scope is a professionalism signal, and the mix of solo, contributor and refactor credits is presented deliberately as range.
+
+### Icons
+
+The site uses a single inline icon family (Lucide, 1.75px stroke). Fact entries in `profile.facts` reference icons by name; available names are listed in `ICON_PATHS` at the top of [js/main.js](js/main.js). No emoji anywhere.
 
 ## Preview locally
 

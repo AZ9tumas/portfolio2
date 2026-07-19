@@ -1,14 +1,21 @@
 /* ==========================================================================
    PORTFOLIO CONFIG — the ONLY file you need to edit.
    ==========================================================================
-   Everything on the site (name, links, games, videos, skills, contact)
-   is rendered from this file. Save, refresh, done.
+   Everything on the site is rendered from this file. Save, refresh, done.
 
-   Handy tokens you can use inside any text string:
-     {name}    -> your developer name
-     {years}   -> years of experience (auto-computed from startYear)
-     {visits}  -> combined visits across all games (auto-summed)
-     {titles}  -> total titles worked on (your games + additionalTitles)
+   Adding a project  -> append an object to `projects`.
+   Adding a video    -> append an object to `caseStudies`.
+   No HTML/CSS/JS changes are ever required.
+
+   Available text tokens (usable in any string):
+     {name}   -> profile.displayName
+     {years}  -> years since profile.startYear (auto-computed)
+
+   CREDIT ACCURACY — read before editing roles:
+   Every project carries a `role` badge that states the exact scope of the
+   contribution ("Core Contributor", "Solo Developer", "Refactoring
+   Engineer", "Front-End Scripter", "Contributor"). Keep these truthful —
+   precise credit scope is a professionalism signal, not a limitation.
    ========================================================================== */
 
 window.PORTFOLIO_CONFIG = {
@@ -16,210 +23,213 @@ window.PORTFOLIO_CONFIG = {
   /* ------------------------------------------------------------------
      1. IDENTITY
      ------------------------------------------------------------------ */
-  developer: {
-    name: "AZ9tumas",
-    monogram: "A9",                       // small logo badge in the navbar
-    role: "Roblox Game Developer",
-    startYear: 2021,                      // {years} is computed from this
-    additionalTitles: 5,                  // titles you contributed to beyond the games listed below
-    availability: "Open for commissions", // hero status badge
+  profile: {
+    displayName: "AZ9tumas",
+    monogram: "A9",                 // small mark in the navbar + favicon
+    tagline: "Roblox Gameplay & Systems Programmer",
+    startYear: 2021,                // {years} is computed from this
+    availability: "Open for commissions",
 
-    // Wrap a word in **double asterisks** to give it the gradient highlight.
-    heroTitle: "I build Roblox worlds that **millions** come back to.",
+    heroHeadline: "Gameplay systems for Roblox titles that ship.",
     heroSub:
-      "Game programmer with {years}+ years in production and {visits} combined visits " +
-      "across shipped titles — specializing in gameplay systems, combat, VFX and UI.",
+      "{years} years of production work across nine shipped titles — from the " +
+      "movement system behind Yellowstone Unleashed (80M+ visits) to " +
+      "full-stack solo builds like Race Through Time.",
 
-    aboutParagraphs: [
-      "I'm {name} — a Roblox game developer who has been shipping production titles since 2021. " +
-      "My flagship project, Yellowstone Unleashed, has crossed 80 million visits, and my own " +
-      "releases like My Pooping Pigeons have peaked at over 1,000 concurrent players.",
-
-      "Beyond my own games, I've helped develop 5+ titles for studios and clients — everything " +
-      "from combat frameworks and inventories to VFX and full game loops. I'm currently pursuing " +
-      "a Computer Science & Engineering degree, and I bring that engineering rigor to every " +
-      "commission: Knit for architecture, ProfileService for bulletproof data, and clean, " +
-      "optimized Luau throughout.",
+    // Shown as a quiet stat band under the hero. Values are plain strings —
+    // keep the labels honest about credit scope.
+    heroStats: [
+      { value: "80M+",   label: "Visits — Yellowstone Unleashed" },
+      { value: "12.2M",  label: "Visits — My Pooping Pigeons" },
+      { value: "1,000+", label: "Peak concurrent players" },
+      { value: "9+",     label: "Shipped titles" },
     ],
 
+    aboutParagraphs: [
+      "I'm {name} — a Roblox game programmer working professionally since 2021. " +
+      "My credits span the full range of production roles: core contributor on " +
+      "Yellowstone Unleashed (80M+ visits), where I built the player movement " +
+      "system; solo developer on Race Through Time, which I scripted end to " +
+      "end; and refactoring engineer on live titles like Catch Lucky Blocks, " +
+      "where I restructured an existing codebase across the front and back end.",
+
+      "I'm currently completing a Computer Science & Engineering degree " +
+      "alongside client work, and I bring that engineering foundation to every " +
+      "project — Knit for architecture, ProfileService for data integrity, and " +
+      "clean, profiled Luau throughout.",
+    ],
+
+    // Icon names come from the built-in set: graduation-cap, calendar,
+    // layers, message-circle, credit-card, check, mail.
     facts: [
-      "🎓 Computer Science undergrad",
-      "🕹️ Shipping games since 2021",
-      "🌍 {visits} combined visits",
-      "✅ 18+ · Commission-ready",
-      "💳 PayPal & Robux accepted",
+      { icon: "graduation-cap", text: "Computer Science & Engineering undergraduate" },
+      { icon: "calendar",       text: "Professional game development since 2021" },
+      { icon: "layers",         text: "9+ shipped titles across contributor, solo and refactor roles" },
+      { icon: "message-circle", text: "Fastest response via Discord DM" },
     ],
   },
 
   /* ------------------------------------------------------------------
      2. CONTACT
      ------------------------------------------------------------------
-     The email is stored split in two parts so scrapers can't harvest it.
-     It is only assembled in the browser when the "Reveal email" button
-     is clicked.
+     The email address is stored split in two parts and is only assembled
+     in the browser when the "Reveal email" button is clicked — it never
+     appears in the page source or rendered DOM before that.
      ------------------------------------------------------------------ */
   contact: {
     discordUrl: "https://discord.com/users/409297983734284288",
-    emailUser: "rounakdas2025",   // part before the @
-    emailDomain: "gmail.com",     // part after the @
-    payments: ["PayPal", "Robux"],
+    emailUser: "rounakdas2025",     // part before the @
+    emailDomain: "gmail.com",       // part after the @
+    paymentNote: "Payment accepted via PayPal or Robux.",
   },
 
   /* ------------------------------------------------------------------
-     3. GAMES — add a new block to add a new game card.
+     3. PROJECTS — append an object to add a project card.
      ------------------------------------------------------------------
      Fields:
-       title         (required) game name
-       url           (required) Roblox game link
-       description   (required) 1–2 punchy sentences
-       icon          emoji used on the generated cover art
-       colors        [from, to] hex colors for the cover gradient
-       role          small label shown next to the title
-       visits        raw number (auto-formatted, auto-summed into {visits})
-       peakCcu       raw number, shows a "peak CCU" badge
-       tags          short keywords
-       featured      true = renders as the big flagship card (use on ONE game)
-       showcaseAnchor true = adds a "Watch showcase" link that jumps to the videos
+       title        (required) game name
+       url          (required) Roblox game link
+       role         (required) exact credit-scope badge text
+       contribution (required) 1–3 sentences stating precisely what you did
+       stats        optional  { visits: "80M+", concurrents: "1,000+" }
+       tags         optional  short keywords
+       featured     true on ONE project = renders as the large lead card
+       caseStudyAnchor true = adds a "Development footage" link that jumps
+                    to the case-studies section
      ------------------------------------------------------------------ */
-  games: [
+  projects: [
     {
       title: "Yellowstone Unleashed",
       url: "https://www.roblox.com/games/12054551325/Yellowstone-Unleashed",
-      description:
-        "My flagship project and highest achievement to date — an experience that has grown " +
-        "past 80 million visits and is still climbing.",
-      icon: "🦖",
-      colors: ["#ff9a3d", "#d9481e"],
-      role: "Developer",
-      visits: 80000000,
-      tags: ["Open World", "Survival", "Dinosaurs"],
+      role: "Core Contributor",
+      contribution:
+        "Contributed core gameplay systems to this open-world dinosaur " +
+        "survival title — primarily the player movement system that every " +
+        "session runs on. The game has passed 80 million visits and is " +
+        "still climbing.",
+      stats: { visits: "80M+" },
+      tags: ["Open world", "Survival", "Movement systems"],
       featured: true,
     },
     {
       title: "My Pooping Pigeons",
       url: "https://www.roblox.com/games/140327715500229/My-Pooping-Pigeons",
-      description:
-        "A viral hit that peaked at 1,000+ concurrent players — proof I build games that scale.",
-      icon: "🕊️",
-      colors: ["#38bdf8", "#6366f1"],
-      role: "Developer",
-      visits: 12200000,
-      peakCcu: 1000,
-      tags: ["Simulator", "Viral Hit"],
+      role: "Contributor",
+      contribution:
+        "Contributor on a simulator title that reached 12.2 million visits " +
+        "and sustained peaks of over 1,000 concurrent players.",
+      stats: { visits: "12.2M", concurrents: "1,000+" },
+      tags: ["Simulator"],
     },
     {
       title: "Catch Lucky Blocks",
       url: "https://www.roblox.com/games/134074745511140/Catch-Lucky-Blocks",
-      description:
-        "Fast, satisfying and endlessly replayable — an arcade catch game built around lucky drops.",
-      icon: "🍀",
-      colors: ["#34d399", "#0ea5e9"],
-      role: "Developer",
-      tags: ["Arcade", "Casual"],
+      role: "Refactoring Engineer",
+      contribution:
+        "Brought in on an existing codebase — not the original scripter — to " +
+        "carry out a major refactor across both the front end and back end, " +
+        "improving structure, reliability and maintainability of a live game.",
+      tags: ["Systems refactor", "Live codebase"],
     },
     {
       title: "My Mutant Anime",
       url: "https://www.roblox.com/games/87137064532509/My-Mutant-Anime",
-      description:
-        "My anime mutant-collector — every system built end to end. See it running in the showcase below.",
-      icon: "🧬",
-      colors: ["#a855f7", "#ec4899"],
-      role: "Developer",
-      tags: ["Anime", "Collector"],
-      showcaseAnchor: true,
+      role: "Front-End Scripter",
+      contribution:
+        "Scripted the front end of this anime collector title — client-side " +
+        "gameplay flow, UI and presentation.",
+      tags: ["Collector", "UI & client systems"],
+      caseStudyAnchor: true,
     },
-
-    /* TEMPLATE — copy, un-comment and fill in to add a game:
-    {
-      title: "Game Name",
-      url: "https://www.roblox.com/games/XXXXXXXX/Game-Name",
-      description: "One or two punchy sentences.",
-      icon: "🎮",
-      colors: ["#ffb224", "#ff6b3d"],
-      role: "Developer",
-      visits: 1000000,        // optional
-      peakCcu: 500,           // optional
-      tags: ["Tag A", "Tag B"],
-    },
-    */
   ],
 
-  // Text on the "+N more titles" card (N comes from additionalTitles above).
-  collabNote:
-    "Hired developer on 5+ additional titles — systems, features and full builds " +
-    "delivered for studios and clients.",
+  // Quiet footnote row under the project grid.
+  additionalContributions: {
+    count: "5+",
+    note:
+      "Beyond the credits above, contributed systems and features to " +
+      "five-plus additional shipped titles for studios and clients.",
+  },
 
   /* ------------------------------------------------------------------
-     4. VIDEO SHOWCASE — add a new block to add a new video card.
+     4. CASE STUDIES & FOOTAGE — append an object to add a video.
      ------------------------------------------------------------------
      Fields:
-       title       (required) card title
-       category    (required) used to build the filter chips automatically
-       description (required) what the viewer is looking at
-       videos      (required) list of { label, id } — the id is the part
-                   after "watch?v=" or "youtu.be/" in the YouTube URL.
-                   Give MORE THAN ONE video to get the series toggle
-                   (great for showing v1 → v2 evolution of a project).
-       note        small caption shown under series cards
+       title     (required) card title
+       category  (required) group heading; entries with the same category
+                 render together under one label (order follows this file)
+       summary   (required) what the viewer is looking at
+       parts     (required) list of { label, id } — id is the part after
+                 "watch?v=" or "youtu.be/" in the YouTube URL.
+                 TWO OR MORE parts = the card renders as one cohesive unit
+                 with a chapter switcher (never two separate tiles).
+       role      optional credit-scope badge (only where credit is defined)
+       note      optional small caption under multi-part cards
+       featured  true on ONE entry = large flagship case-study treatment
+       highlights optional bullet list, shown on the featured entry
      ------------------------------------------------------------------ */
-  showcase: [
+  caseStudies: [
     {
-      title: "My Mutant Anime — Full Game",
-      category: "Full Game",
-      description:
-        "Complete gameplay systems from My Mutant Anime — progression, collection mechanics, " +
-        "UI and the entire game loop, all shipped to production.",
-      note: "Two milestones of the same game — flip between them to see how far it evolved.",
-      videos: [
-        { label: "Milestone 1", id: "xc1r7EwBPww" },
-        { label: "Milestone 2", id: "v4KJQhiVFMY" },
+      title: "Race Through Time",
+      category: "Featured case study",
+      role: "Solo Developer — Full Stack",
+      summary:
+        "The strongest end-to-end credit in this portfolio. I scripted the " +
+        "entire game — every front-end and back-end system, from the " +
+        "gameplay loop and data layer up to the cinematic VFX shown in " +
+        "this reel.",
+      highlights: [
+        "Full gameplay loop — front end and back end, solo",
+        "Server architecture and data persistence",
+        "Cinematic VFX, timed sequences and screen feedback",
+      ],
+      parts: [{ label: "VFX & cinematics reel", id: "OZkQ9dOZD88" }],
+      featured: true,
+    },
+    {
+      title: "My Mutant Anime",
+      category: "Title showcases",
+      role: "Front-End Scripter",
+      summary:
+        "Two development milestones of the shipped front end I scripted — " +
+        "switch chapters to see the UI and client-side flow evolve " +
+        "between builds.",
+      note: "One title, two builds — the chapters show the same front end at different stages.",
+      parts: [
+        { label: "Chapter 1", id: "xc1r7EwBPww" },
+        { label: "Chapter 2", id: "v4KJQhiVFMY" },
       ],
     },
     {
-      title: "Gun System",
-      category: "Combat",
-      description:
-        "A production-ready gun framework — responsive equip, fire and reload flow " +
-        "with crisp feedback and effects.",
-      videos: [{ label: "Watch", id: "RCdd1NCaIw4" }],
-    },
-    {
       title: "Dinosaur Survival",
-      category: "Survival",
-      description:
-        "Survival systems in a prehistoric world — threats, resources and the " +
-        "moment-to-moment gameplay loop.",
-      note: "Part 1 and Part 2 — toggle to watch the project grow.",
-      videos: [
+      category: "Title showcases",
+      summary:
+        "A survival project shown at two stages of development — threats, " +
+        "resources and the moment-to-moment loop, with Part 2 building " +
+        "directly on the systems from Part 1.",
+      note: "Part 2 extends Part 1 — switch between them to see the build grow.",
+      parts: [
         { label: "Part 1", id: "i0Be3nKqocI" },
         { label: "Part 2", id: "wFRHT9GDBCo" },
       ],
     },
     {
-      title: "Race Through Time — VFX",
-      category: "VFX",
-      description:
-        "Cinematic visual effects built for Race Through Time — timed sequences, " +
-        "screen feedback and the polish that sells the fantasy.",
-      videos: [{ label: "Watch", id: "OZkQ9dOZD88" }],
-    },
-    {
       title: "Minecraft-Style Inventory",
-      category: "UI & Systems",
-      description:
-        "A Minecraft-style inventory rebuilt in Roblox — grid slots, stacking, " +
-        "drag-and-drop and hotbar with clean client-server sync.",
-      videos: [{ label: "Watch", id: "Rr014rk_zFA" }],
+      category: "Systems deep-dives",
+      summary:
+        "A Minecraft-style inventory rebuilt in Roblox — grid slots, " +
+        "stacking, drag-and-drop and hotbar, with clean client–server " +
+        "synchronisation.",
+      parts: [{ label: "Watch", id: "Rr014rk_zFA" }],
     },
-
-    /* TEMPLATE — copy, un-comment and fill in to add a video:
     {
-      title: "Project Name",
-      category: "Combat",                       // reuse a category or create a new one
-      description: "What this video demonstrates.",
-      videos: [{ label: "Watch", id: "VIDEO_ID" }],
+      title: "Gun System",
+      category: "Systems deep-dives",
+      summary:
+        "A production-ready gun framework — equip, fire and reload flow " +
+        "with recoil, effects and responsive feedback.",
+      parts: [{ label: "Watch", id: "RCdd1NCaIw4" }],
     },
-    */
   ],
 
   /* ------------------------------------------------------------------
@@ -231,39 +241,41 @@ window.PORTFOLIO_CONFIG = {
       tagline: "Game architecture",
       url: "https://sleitnick.github.io/Knit/",
       description:
-        "My backbone for structured, maintainable codebases — Services on the server, " +
-        "Controllers on the client, and clean networking in between.",
+        "Backbone for structured, maintainable codebases — Services on the " +
+        "server, Controllers on the client, and clean networking in between.",
     },
     {
       name: "ProfileService",
       tagline: "Data persistence",
       url: "https://madstudioroblox.github.io/ProfileService/",
       description:
-        "The industry standard for safe player data — session-locked profiles that " +
-        "prevent dupes and data loss, even at scale.",
+        "Session-locked player profiles that prevent duplication and data " +
+        "loss at scale — the standard for safe player data on Roblox.",
     },
   ],
 
   skills: [
     "Luau",
     "Roblox Studio",
-    "Client-Server Networking",
+    "Client–Server Networking",
     "DataStore Architecture",
+    "Movement & Character Systems",
     "Combat & Weapon Systems",
     "UI / UX Implementation",
     "VFX & Particle Effects",
     "NPC & AI Behavior",
     "Performance Optimization",
-    "Game Design",
   ],
 
   /* ------------------------------------------------------------------
      6. SEO — browser tab title & search-engine description
      ------------------------------------------------------------------ */
   seo: {
-    title: "AZ9tumas — Roblox Game Developer",
+    title: "AZ9tumas — Roblox Gameplay & Systems Programmer",
     description:
-      "Roblox game developer since 2021 with {visits} combined visits across shipped titles, " +
-      "including Yellowstone Unleashed (80M+). Open for commissions — systems, combat, VFX, UI.",
+      "Roblox game programmer working professionally since 2021. Core " +
+      "contributor on Yellowstone Unleashed (80M+ visits), solo developer " +
+      "on Race Through Time, and systems engineer across nine shipped " +
+      "titles. Open for commissions.",
   },
 };

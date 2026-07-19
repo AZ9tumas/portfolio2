@@ -36,30 +36,51 @@
     return node;
   }
 
-  const REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  /* ---------- derived numbers ---------- */
-  const YEARS = Math.max(1, new Date().getFullYear() - C.developer.startYear);
-  const TOTAL_VISITS = C.games.reduce((a, g) => a + (g.visits || 0), 0);
-  const TITLES = C.games.length + (C.developer.additionalTitles || 0);
-  const PEAK_CCU = Math.max(0, ...C.games.map((g) => g.peakCcu || 0));
-
-  function fmt(n) {
-    if (!n) return "0";
-    if (n >= 1e6) {
-      const v = n / 1e6;
-      return (v >= 100 ? Math.round(v) : +v.toFixed(1)) + "M+";
+  // Required-field guard: fail loudly in the console instead of rendering
+  // half-empty cards when a config entry is missing something.
+  function req(obj, key, ctx) {
+    if (obj[key] == null || obj[key] === "" ||
+        (Array.isArray(obj[key]) && obj[key].length === 0)) {
+      throw new Error('[portfolio] config error: missing "' + key + '" in ' + ctx);
     }
-    if (n >= 1e3) return Math.round(n / 1e3) + "K+";
-    return String(n);
+    return obj[key];
   }
 
+  const REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------- icon system (Lucide, stroke 1.75, 24px grid) ----------
+     One consistent family for every glyph on the site. Referenced by
+     name from config (facts) and from the renderer below.            */
+  const ICON_PATHS = {
+    "arrow-up-right": '<path d="M7 7h10v10"/><path d="M7 17 17 7"/>',
+    "play": '<polygon points="6 3 20 12 6 21 6 3"/>',
+    "mail": '<rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>',
+    "message-circle": '<path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/>',
+    "copy": '<rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>',
+    "check": '<path d="M20 6 9 17l-5-5"/>',
+    "graduation-cap": '<path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/>',
+    "calendar": '<path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/>',
+    "layers": '<path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"/><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"/>',
+    "credit-card": '<rect width="20" height="14" x="2" y="5" rx="2"/><line x1="2" x2="22" y1="10" y2="10"/>',
+    "eye": '<path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/>',
+  };
+
+  function icon(name, cls) {
+    const paths = ICON_PATHS[name];
+    if (!paths) throw new Error('[portfolio] unknown icon "' + name + '"');
+    return (
+      '<svg class="ic' + (cls ? " " + cls : "") + '" viewBox="0 0 24 24" fill="none" ' +
+      'stroke="currentColor" stroke-width="1.75" stroke-linecap="round" ' +
+      'stroke-linejoin="round" aria-hidden="true">' + paths + "</svg>"
+    );
+  }
+
+  /* ---------- text tokens ---------- */
+  const YEARS = Math.max(1, new Date().getFullYear() - C.profile.startYear);
   const fill = (s) =>
     String(s)
-      .replace(/\{name\}/g, C.developer.name)
-      .replace(/\{years\}/g, YEARS)
-      .replace(/\{visits\}/g, fmt(TOTAL_VISITS))
-      .replace(/\{titles\}/g, TITLES + "+");
+      .replace(/\{name\}/g, C.profile.displayName)
+      .replace(/\{years\}/g, YEARS);
 
   /* ==========================================================
      RENDER: meta, nav, hero
@@ -69,165 +90,159 @@
     const desc = $('meta[name="description"]');
     if (desc) desc.setAttribute("content", fill(C.seo.description));
 
-    $("#brand-name").textContent = C.developer.name;
+    $("#brand-name").textContent = C.profile.displayName;
     $("#brand-mark").textContent =
-      C.developer.monogram || C.developer.name.slice(0, 2).toUpperCase();
+      C.profile.monogram || C.profile.displayName.slice(0, 2).toUpperCase();
 
-    $("#foot-name").textContent = C.developer.name;
-    $("#foot-name-2").textContent = C.developer.name;
-    $("#foot-tag").textContent = C.developer.role;
+    $("#foot-name").textContent = C.profile.displayName;
+    $("#foot-name-2").textContent = C.profile.displayName;
+    $("#foot-tag").textContent = C.profile.tagline;
     $("#foot-year").textContent = new Date().getFullYear();
   }
 
   function renderHero() {
-    $("#avail-text").textContent = C.developer.availability;
+    $("#avail-text").textContent = C.profile.availability;
+    $("#hero-title").textContent = fill(C.profile.heroHeadline);
+    $("#hero-sub").textContent = fill(C.profile.heroSub);
 
-    $("#hero-title").innerHTML = esc(fill(C.developer.heroTitle))
-      .replace(/\*\*(.+?)\*\*/g, '<span class="grad-text">$1</span>');
-    $("#hero-sub").textContent = fill(C.developer.heroSub);
-
-    const stats = [
-      { num: fmt(TOTAL_VISITS), label: "Combined Visits" },
-      { num: YEARS + "+", label: "Years Shipping" },
-      { num: TITLES + "+", label: "Titles Worked On" },
-      { num: fmt(PEAK_CCU), label: "Peak Concurrent" },
-    ];
-    const row = $("#stats-row");
-    stats.forEach((s) => {
-      const box = el("div", "stat reveal");
-      const num = el("div", "stat-num", "0");
-      num.dataset.final = s.num;
-      box.append(num, el("div", "stat-label", esc(s.label)));
-      row.append(box);
+    const band = $("#stats-band");
+    (C.profile.heroStats || []).forEach((s) => {
+      const box = el("div", "stat");
+      box.append(el("div", "stat-num", esc(s.value)));
+      box.append(el("div", "stat-label", esc(s.label)));
+      band.append(box);
     });
   }
 
   /* ==========================================================
-     RENDER: games
+     RENDER: shipped work
      ========================================================== */
-  function coverEl(game, extraCls) {
-    const c = el("div", "cover" + (extraCls ? " " + extraCls : ""));
-    c.style.setProperty("--c1", (game.colors && game.colors[0]) || "#ffb224");
-    c.style.setProperty("--c2", (game.colors && game.colors[1]) || "#ff6b3d");
-    c.append(el("span", "cover-icon", esc(game.icon || "🎮")));
-    if (game.visits) {
-      c.append(el("span", "cover-visits", fmt(game.visits) + " <small>visits</small>"));
+  function statRow(stats) {
+    const wrap = el("div", "proj-stats");
+    if (stats.visits) {
+      wrap.append(el("div", "proj-stat",
+        "<b>" + esc(stats.visits) + "</b><span>visits</span>"));
     }
-    return c;
+    if (stats.concurrents) {
+      wrap.append(el("div", "proj-stat",
+        "<b>" + esc(stats.concurrents) + "</b><span>peak CCU</span>"));
+    }
+    return wrap;
   }
 
-  function renderFeatured() {
-    const f = C.games.find((g) => g.featured);
+  function renderFeaturedProject() {
+    const f = C.projects.find((p) => p.featured);
     if (!f) return;
 
-    const wrap = el("article", "featured reveal");
-    const cov = coverEl(f, "feat-cover");
-    cov.append(el("span", "feat-flag", "★ Flagship"));
+    const card = el("article", "featured-card reveal");
 
-    const body = el("div", "feat-body");
-    body.append(el("span", "eyebrow", "Flagship Title"));
-    body.append(el("h3", null, esc(f.title)));
-    body.append(el("p", "g-desc", esc(f.description)));
+    const main = el("div", "feat-main");
+    const head = el("div", "feat-head");
+    head.append(el("span", "role-badge", esc(req(f, "role", f.title))));
+    main.append(head);
+    main.append(el("h3", null, esc(req(f, "title", "featured project"))));
+    main.append(el("p", "proj-desc", esc(req(f, "contribution", f.title))));
 
     if (f.tags && f.tags.length) {
       const tags = el("div", "tag-row");
       f.tags.forEach((t) => tags.append(el("span", "tag", esc(t))));
-      body.append(tags);
+      main.append(tags);
     }
 
-    const mini = el("div", "feat-stats");
-    const miniStat = (v, label) =>
-      el("div", "mini-stat", "<b>" + v + "</b><span>" + esc(label) + "</span>");
-    if (f.visits) mini.append(miniStat(fmt(f.visits), "Visits"));
-    if (f.peakCcu) mini.append(miniStat(fmt(f.peakCcu), "Peak CCU"));
-    if (f.role) mini.append(miniStat(esc(f.role), "Role"));
-    body.append(mini);
-
     const cta = el("div", "feat-cta-row");
-    cta.append(extLink(el("a", "btn btn-primary", "Play on Roblox ↗"), f.url));
-    body.append(cta);
+    cta.append(extLink(
+      el("a", "btn btn-primary", "View on Roblox " + icon("arrow-up-right")),
+      req(f, "url", f.title)));
+    main.append(cta);
 
-    wrap.append(cov, body);
-    $("#featured-slot").append(wrap);
+    const aside = el("div", "feat-aside");
+    if (f.stats && f.stats.visits) {
+      aside.append(el("div", "feat-stat-num", esc(f.stats.visits)));
+      aside.append(el("div", "feat-stat-label", "Visits and climbing"));
+    }
+    if (f.stats && f.stats.concurrents) {
+      aside.append(el("div", "feat-stat-label", esc(f.stats.concurrents) + " peak CCU"));
+    }
+
+    card.append(main, aside);
+    $("#featured-slot").append(card);
   }
 
-  function renderGames() {
-    const grid = $("#games-grid");
+  function renderProjects() {
+    const grid = $("#work-grid");
 
-    C.games.filter((g) => !g.featured).forEach((g) => {
-      const card = el("article", "game-card reveal");
-      card.append(coverEl(g));
+    C.projects.filter((p) => !p.featured).forEach((p) => {
+      const card = el("article", "proj-card reveal");
 
-      const body = el("div", "g-body");
-      const top = el("div", "g-title-row");
-      top.append(el("h3", null, esc(g.title)));
-      if (g.role) top.append(el("span", "g-role", esc(g.role)));
-      body.append(top);
-      body.append(el("p", "g-desc", esc(g.description)));
+      const head = el("div", "proj-head");
+      head.append(el("h3", null, esc(req(p, "title", "project"))));
+      head.append(el("span", "role-badge", esc(req(p, "role", p.title))));
+      card.append(head);
 
-      const badges = el("div", "badge-row");
-      if (g.visits) badges.append(el("span", "badge badge-accent", fmt(g.visits) + " visits"));
-      if (g.peakCcu) badges.append(el("span", "badge badge-accent", fmt(g.peakCcu) + " peak CCU"));
-      (g.tags || []).forEach((t) => badges.append(el("span", "badge", esc(t))));
-      body.append(badges);
-      card.append(body);
+      card.append(el("p", "proj-desc", esc(req(p, "contribution", p.title))));
 
-      const foot = el("div", "g-foot");
-      foot.append(extLink(el("a", "g-link", 'Play on Roblox <span aria-hidden="true">↗</span>'), g.url));
-      if (g.showcaseAnchor) {
-        const w = el("a", "g-link alt", "▶ Watch showcase");
-        w.href = "#showcase";
-        foot.append(w);
+      if (p.stats && (p.stats.visits || p.stats.concurrents)) {
+        card.append(statRow(p.stats));
+      }
+      if (p.tags && p.tags.length) {
+        const tags = el("div", "tag-row");
+        p.tags.forEach((t) => tags.append(el("span", "tag", esc(t))));
+        card.append(tags);
+      }
+
+      const foot = el("div", "proj-foot");
+      foot.append(extLink(
+        el("a", "text-link", "View on Roblox " + icon("arrow-up-right")),
+        req(p, "url", p.title)));
+      if (p.caseStudyAnchor) {
+        const a = el("a", "text-link quiet", "Development footage " + icon("play"));
+        a.href = "#case-studies";
+        foot.append(a);
       }
       card.append(foot);
       grid.append(card);
     });
 
-    if (C.developer.additionalTitles) {
-      const card = el("article", "game-card more-card reveal");
-      card.append(el("div", "more-num", "+" + C.developer.additionalTitles));
-      card.append(el("p", "g-desc", esc(C.collabNote || "More client titles shipped.")));
-      const foot = el("div", "g-foot");
-      const a = el("a", "g-link", "Ask about client work →");
+    const extra = C.additionalContributions;
+    if (extra && extra.count) {
+      const note = el("div", "more-note reveal");
+      note.append(el("span", "more-count", "+" + esc(extra.count).replace(/\+$/, "")));
+      note.append(el("p", null, esc(extra.note || "Additional shipped titles.")));
+      const a = el("a", "text-link", "Ask about client work " + icon("arrow-up-right"));
       a.href = "#contact";
-      foot.append(a);
-      card.append(foot);
-      grid.append(card);
+      note.append(a);
+      $("#more-note-slot").append(note);
     }
   }
 
   /* ==========================================================
-     RENDER: video showcase (lite YouTube embeds + series toggle)
+     RENDER: case studies (lazy YouTube embeds + chapter switcher)
      ========================================================== */
-  const PLAY_SVG =
-    '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.14v13.72L19 12 8 5.14z"/></svg>';
-
   function iframeHTML(id, title) {
     return (
       '<iframe src="https://www.youtube-nocookie.com/embed/' + encodeURIComponent(id) +
       '?autoplay=1&rel=0" title="' + esc(title) +
-      '" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>'
+      '" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>'
     );
   }
 
-  function videoCard(item) {
-    const card = el("article", "vid-card reveal");
-    card.dataset.cat = item.category;
-
-    const frame = el("div", "vid-frame");
+  // Media frame with thumbnail-first loading. Returns { frame, setPart }.
+  function mediaFrame(item) {
+    const parts = req(item, "parts", item.title);
+    const frame = el("div", "media-frame");
     let current = 0;
     let playing = false;
 
-    function renderFrame() {
-      const v = item.videos[current];
+    function render() {
+      const v = parts[current];
       frame.innerHTML = "";
       if (playing) {
         frame.innerHTML = iframeHTML(v.id, item.title + " — " + (v.label || ""));
         return;
       }
-      const btn = el("button", "vid-thumb");
+      const btn = el("button", "media-thumb");
       btn.type = "button";
-      btn.setAttribute("aria-label", "Play video: " + item.title);
+      btn.setAttribute("aria-label", "Play video: " + item.title + " — " + (v.label || ""));
 
       const img = el("img");
       img.alt = "";
@@ -241,158 +256,210 @@
       img.addEventListener("load", () => { if (img.naturalWidth <= 120) fallback(); });
       img.addEventListener("error", fallback);
 
-      btn.append(img, el("span", "play-badge", PLAY_SVG));
-      if (item.videos.length > 1) {
-        btn.append(el("span", "frame-flag", item.videos.length + "-part series"));
+      const play = el("span", "play-badge");
+      play.innerHTML =
+        '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.14v13.72L19 12 8 5.14z"/></svg>';
+      btn.append(img, play);
+
+      if (parts.length > 1) {
+        btn.append(el("span", "part-flag",
+          esc(v.label || "Part " + (current + 1)) + " · " +
+          (current + 1) + "/" + parts.length));
       }
-      btn.addEventListener("click", () => { playing = true; renderFrame(); });
+      btn.addEventListener("click", () => { playing = true; render(); });
       frame.append(btn);
     }
 
-    const meta = el("div", "vid-meta");
-    const head = el("div", "vid-head");
-    head.append(el("span", "vid-cat", esc(item.category)));
+    render();
+    return {
+      frame,
+      setPart(i) {
+        if (current === i) return;
+        current = i;
+        render(); // keeps playing state: if the viewer was watching, the next part plays
+      },
+    };
+  }
 
-    if (item.videos.length > 1) {
-      const seg = el("div", "seg");
-      seg.setAttribute("role", "group");
-      seg.setAttribute("aria-label", "Switch between videos");
-      item.videos.forEach((v, i) => {
-        const b = el("button", "seg-btn" + (i === 0 ? " active" : ""),
-          esc(v.label || "Part " + (i + 1)));
-        b.type = "button";
-        b.addEventListener("click", () => {
-          if (current === i) return;
-          current = i;
-          $$(".seg-btn", seg).forEach((x, xi) => x.classList.toggle("active", xi === i));
-          renderFrame();
+  function segControl(parts, onSwitch) {
+    const seg = el("div", "seg");
+    seg.setAttribute("role", "group");
+    seg.setAttribute("aria-label", "Switch between parts");
+    parts.forEach((v, i) => {
+      const b = el("button", "seg-btn" + (i === 0 ? " active" : ""),
+        esc(v.label || "Part " + (i + 1)));
+      b.type = "button";
+      b.setAttribute("aria-pressed", i === 0 ? "true" : "false");
+      b.addEventListener("click", () => {
+        $$(".seg-btn", seg).forEach((x, xi) => {
+          x.classList.toggle("active", xi === i);
+          x.setAttribute("aria-pressed", xi === i ? "true" : "false");
         });
-        seg.append(b);
+        onSwitch(i);
       });
-      head.append(seg);
+      seg.append(b);
+    });
+    return seg;
+  }
+
+  function renderFeaturedCaseStudy(item) {
+    const card = el("article", "cs-featured reveal");
+    const media = mediaFrame(item);
+    card.append(media.frame);
+
+    const body = el("div", "cs-feat-body");
+    body.append(el("span", "eyebrow", "Featured case study"));
+    if (item.role) body.append(el("span", "role-badge", esc(item.role)));
+    body.append(el("h3", null, esc(req(item, "title", "featured case study"))));
+    body.append(el("p", "cs-summary", esc(req(item, "summary", item.title))));
+
+    if (item.highlights && item.highlights.length) {
+      const ul = el("ul", "cs-highlights");
+      item.highlights.forEach((h) =>
+        ul.append(el("li", null, icon("check") + "<span>" + esc(h) + "</span>")));
+      body.append(ul);
     }
 
-    meta.append(head);
-    meta.append(el("h3", "vid-title", esc(item.title)));
-    meta.append(el("p", "vid-desc", esc(item.description)));
-    if (item.note) meta.append(el("p", "series-note", "↻ " + esc(item.note)));
+    card.append(body);
+    $("#cs-featured-slot").append(card);
+  }
 
-    renderFrame();
-    card.append(frame, meta);
+  function caseStudyCard(item) {
+    const card = el("article", "cs-card reveal");
+    const media = mediaFrame(item);
+    card.append(media.frame);
+
+    const meta = el("div", "cs-meta");
+    // The group header above the grid already names the category, so the
+    // head row only renders when it adds information: a credit-scope badge
+    // and/or a part switcher.
+    if (item.role || item.parts.length > 1) {
+      const head = el("div", "cs-head-row");
+      if (item.role) head.append(el("span", "role-badge", esc(item.role)));
+      if (item.parts.length > 1) head.append(segControl(item.parts, media.setPart));
+      meta.append(head);
+    }
+
+    meta.append(el("h3", "cs-title", esc(req(item, "title", "case study"))));
+    meta.append(el("p", "cs-summary", esc(req(item, "summary", item.title))));
+    if (item.note) {
+      meta.append(el("p", "cs-note", icon("layers") + "<span>" + esc(item.note) + "</span>"));
+    }
+
+    card.append(meta);
     return card;
   }
 
-  function renderShowcase() {
-    const cats = [...new Set(C.showcase.map((s) => s.category))];
-    const filters = $("#filters");
+  function renderCaseStudies() {
+    const featured = C.caseStudies.find((s) => s.featured);
+    if (featured) renderFeaturedCaseStudy(featured);
 
-    const allBtn = el("button", "chip active", "All");
-    allBtn.type = "button";
-    allBtn.dataset.cat = "*";
-    filters.append(allBtn);
-    cats.forEach((c) => {
-      const b = el("button", "chip", esc(c));
-      b.type = "button";
-      b.dataset.cat = c;
-      filters.append(b);
+    // Group the rest by category, preserving config order.
+    const rest = C.caseStudies.filter((s) => !s.featured);
+    const groups = new Map();
+    rest.forEach((s) => {
+      const cat = req(s, "category", s.title);
+      if (!groups.has(cat)) groups.set(cat, []);
+      groups.get(cat).push(s);
     });
 
-    filters.addEventListener("click", (e) => {
-      const btn = e.target.closest(".chip");
-      if (!btn) return;
-      $$(".chip", filters).forEach((x) => x.classList.toggle("active", x === btn));
-      $$("#showcase-grid .vid-card").forEach((card) => {
-        card.classList.toggle(
-          "hidden",
-          btn.dataset.cat !== "*" && card.dataset.cat !== btn.dataset.cat
-        );
-      });
-    });
+    const root = $("#cs-groups");
+    groups.forEach((items, cat) => {
+      const section = el("div", "cs-group");
+      const head = el("div", "group-head reveal");
+      head.append(el("span", "eyebrow", esc(cat)));
+      section.append(head);
 
-    const grid = $("#showcase-grid");
-    C.showcase.forEach((s) => grid.append(videoCard(s)));
+      const grid = el("div", "cs-grid");
+      items.forEach((s) => grid.append(caseStudyCard(s)));
+      section.append(grid);
+      root.append(section);
+    });
   }
 
   /* ==========================================================
-     RENDER: tech, about, contact
+     RENDER: stack, about, contact
      ========================================================== */
-  function renderTech() {
+  function renderStack() {
     const grid = $("#fw-grid");
     C.frameworks.forEach((f) => {
-      const a = extLink(el("a", "fw-card reveal"), f.url);
+      const a = extLink(el("a", "fw-card reveal"), req(f, "url", f.name));
       a.append(el("div", "fw-top",
-        '<span class="fw-name">' + esc(f.name) + '</span>' +
-        '<span class="fw-tag">' + esc(f.tagline || "") + "</span>"));
-      a.append(el("p", "fw-desc", esc(f.description)));
-      a.append(el("span", "fw-link", "View docs ↗"));
+        '<span class="fw-name">' + esc(req(f, "name", "framework")) + "</span>" +
+        '<span class="cat-badge">' + esc(f.tagline || "") + "</span>"));
+      a.append(el("p", "fw-desc", esc(f.description || "")));
+      a.append(el("span", "fw-link", "Documentation " + icon("arrow-up-right")));
       grid.append(a);
     });
 
     const skills = $("#skills");
-    C.skills.forEach((s) => skills.append(el("span", "skill-chip", esc(s))));
+    C.skills.forEach((s) => skills.append(el("li", "skill-item", esc(s))));
   }
 
   function renderAbout() {
     const copy = $("#about-copy");
-    C.developer.aboutParagraphs.forEach((p) => copy.append(el("p", null, esc(fill(p)))));
+    C.profile.aboutParagraphs.forEach((p) => copy.append(el("p", null, esc(fill(p)))));
+
     const facts = $("#about-facts");
-    C.developer.facts.forEach((f) => facts.append(el("li", "fact", esc(fill(f)))));
+    C.profile.facts.forEach((f) => {
+      facts.append(el("li", "fact",
+        icon(req(f, "icon", "fact entry")) + "<span>" + esc(fill(req(f, "text", "fact entry"))) + "</span>"));
+    });
   }
 
   function renderContact() {
-    const grid = $("#contact-grid");
+    const copy = $("#contact-copy");
+    copy.append(el("p", null,
+      "The fastest way to reach me is a Discord DM — I reply to serious " +
+      "commission and collaboration enquiries first. Email works too if " +
+      "you prefer a paper trail."));
+    copy.append(el("p", null,
+      "Tell me what you're building, the systems you need, and your " +
+      "timeline — I'll come back with scope and availability."));
+    copy.append(el("div", "pay-line",
+      icon("credit-card") + "<span>" + esc(C.contact.paymentNote) + "</span>"));
 
-    // Discord
-    const d = el("div", "c-card reveal");
-    d.append(el("div", "c-ico", "💬"));
-    d.append(el("h3", null, "Discord"));
-    d.append(el("p", null, "Fastest way to reach me — DMs are open."));
-    d.append(extLink(el("a", "btn btn-primary", "Message on Discord ↗"), C.contact.discordUrl));
-    grid.append(d);
+    const card = $("#contact-card");
 
-    // Email — assembled only on click so bots can't scrape it.
-    const em = el("div", "c-card reveal");
-    em.append(el("div", "c-ico", "✉️"));
-    em.append(el("h3", null, "Email"));
-    em.append(el("p", null, "Kept hidden from bots — click to reveal."));
+    const d = extLink(
+      el("a", "btn btn-primary", icon("message-circle") + " Message on Discord"),
+      req(C.contact, "discordUrl", "contact"));
+    card.append(d);
+
+    // Email — assembled only on click; never present in the DOM before that.
     const zone = el("div", "email-zone");
-    const btn = el("button", "btn btn-ghost", "Reveal email");
+    const btn = el("button", "btn btn-ghost", icon("eye") + " Reveal email");
     btn.type = "button";
     btn.addEventListener("click", () => {
-      const addr = C.contact.emailUser + "@" + C.contact.emailDomain;
+      const addr = req(C.contact, "emailUser", "contact") + "@" +
+                   req(C.contact, "emailDomain", "contact");
       zone.innerHTML = "";
-      const link = el("a", "email-link", esc(addr));
+      const row = el("div", "email-row");
+      const link = el("a", "email-addr", esc(addr));
       link.href = "mailto:" + addr;
-      const copy = el("button", "copy-btn", "Copy");
-      copy.type = "button";
-      copy.addEventListener("click", async () => {
+      const copyBtn = el("button", "copy-btn", icon("copy") + " Copy");
+      copyBtn.type = "button";
+      copyBtn.addEventListener("click", async () => {
         try {
           await navigator.clipboard.writeText(addr);
-          copy.textContent = "Copied ✓";
+          copyBtn.innerHTML = icon("check") + " Copied";
         } catch {
-          copy.textContent = "Select & copy";
+          copyBtn.innerHTML = "Select & copy";
         }
-        setTimeout(() => { copy.textContent = "Copy"; }, 1800);
+        setTimeout(() => { copyBtn.innerHTML = icon("copy") + " Copy"; }, 1800);
       });
-      zone.append(link, copy);
+      row.append(link, copyBtn);
+      zone.append(row);
     });
     zone.append(btn);
-    em.append(zone);
-    grid.append(em);
+    card.append(zone);
 
-    // Payments
-    const p = el("div", "c-card reveal");
-    p.append(el("div", "c-ico", "💳"));
-    p.append(el("h3", null, "Payments"));
-    p.append(el("p", null, "Flexible options for commissions."));
-    const row = el("div", "pay-row");
-    (C.contact.payments || []).forEach((x) => row.append(el("span", "pay-chip", "✓ " + esc(x))));
-    p.append(row);
-    grid.append(p);
+    card.append(el("p", "contact-hint",
+      "The address is kept out of the page source to avoid scraping — it only appears when you reveal it."));
   }
 
   /* ==========================================================
-     FX: reveal-on-scroll, counters, nav, particles
+     FX: reveal-on-scroll, nav
      ========================================================== */
   function initReveal() {
     const els = $$(".reveal");
@@ -400,7 +467,7 @@
     els.forEach((n) => {
       const i = perParent.get(n.parentElement) || 0;
       perParent.set(n.parentElement, i + 1);
-      n.style.transitionDelay = Math.min(i * 70, 350) + "ms";
+      n.style.transitionDelay = Math.min(i * 60, 300) + "ms";
     });
     const ob = new IntersectionObserver(
       (entries) => {
@@ -411,43 +478,9 @@
           }
         });
       },
-      { threshold: 0.12 }
+      { threshold: 0.1 }
     );
     els.forEach((n) => ob.observe(n));
-  }
-
-  function initCounters() {
-    const row = $("#stats-row");
-    if (!row) return;
-    const nums = $$(".stat-num", row);
-    const setFinal = () => nums.forEach((n) => { n.textContent = n.dataset.final; });
-    if (REDUCED) { setFinal(); return; }
-
-    const ob = new IntersectionObserver(
-      (entries) => {
-        if (!entries.some((e) => e.isIntersecting)) return;
-        ob.disconnect();
-        nums.forEach((n) => {
-          const final = n.dataset.final || "0";
-          const m = final.match(/^(\d+(?:\.\d+)?)(.*)$/);
-          if (!m) { n.textContent = final; return; }
-          const target = parseFloat(m[1]);
-          const suffix = m[2];
-          const dec = (m[1].split(".")[1] || "").length;
-          const t0 = performance.now();
-          const dur = 1500;
-          const tick = (t) => {
-            const p = Math.min(1, (t - t0) / dur);
-            const eased = 1 - Math.pow(1 - p, 3);
-            n.textContent = (target * eased).toFixed(dec) + suffix;
-            if (p < 1) requestAnimationFrame(tick);
-          };
-          requestAnimationFrame(tick);
-        });
-      },
-      { threshold: 0.4 }
-    );
-    ob.observe(row);
   }
 
   function initNav() {
@@ -490,61 +523,19 @@
     $$("main section[id]").forEach((s) => spy.observe(s));
   }
 
-  function initParticles() {
-    const canvas = $("#fx");
-    if (!canvas) return;
-    if (REDUCED) { canvas.remove(); return; }
-
-    const ctx = canvas.getContext("2d");
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    let w = 0, h = 0;
-
-    function resize() {
-      w = canvas.width = canvas.offsetWidth * dpr;
-      h = canvas.height = canvas.offsetHeight * dpr;
-    }
-    window.addEventListener("resize", resize, { passive: true });
-    resize();
-
-    const COLORS = ["#ffb224", "#ffb224", "#ff8a5c", "#9db8ff", "#ffffff"];
-    const ps = Array.from({ length: 64 }, () => ({
-      x: Math.random() * w,
-      y: Math.random() * h,
-      r: (Math.random() * 1.5 + 0.5) * dpr,
-      s: (Math.random() * 0.32 + 0.06) * dpr,
-      o: Math.random() * 0.45 + 0.12,
-      p: Math.random() * Math.PI * 2,
-      c: COLORS[(Math.random() * COLORS.length) | 0],
-    }));
-
-    (function loop() {
-      ctx.clearRect(0, 0, w, h);
-      for (const pt of ps) {
-        pt.y -= pt.s;
-        pt.p += 0.012;
-        if (pt.y < -12) { pt.y = h + 12; pt.x = Math.random() * w; }
-        ctx.globalAlpha = pt.o * (0.62 + 0.38 * Math.sin(pt.p));
-        ctx.fillStyle = pt.c;
-        ctx.beginPath();
-        ctx.arc(pt.x, pt.y, pt.r, 0, 7);
-        ctx.fill();
-      }
-      ctx.globalAlpha = 1;
-      requestAnimationFrame(loop);
-    })();
-  }
-
   /* ---------- boot ---------- */
-  renderMeta();
-  renderHero();
-  renderFeatured();
-  renderGames();
-  renderShowcase();
-  renderTech();
-  renderAbout();
-  renderContact();
-  initReveal();
-  initCounters();
-  initNav();
-  initParticles();
+  try {
+    renderMeta();
+    renderHero();
+    renderFeaturedProject();
+    renderProjects();
+    renderCaseStudies();
+    renderStack();
+    renderAbout();
+    renderContact();
+    initReveal();
+    initNav();
+  } catch (err) {
+    console.error(err);
+  }
 })();

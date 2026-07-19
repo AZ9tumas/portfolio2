@@ -3,16 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AZ9tumas — Roblox Game Developer</title>
-  <meta name="description" content="Roblox game developer since 2021 with 92M+ combined visits across shipped titles, including Yellowstone Unleashed (80M+). Open for commissions.">
+  <title>AZ9tumas — Roblox Gameplay & Systems Programmer</title>
+  <meta name="description" content="Roblox game programmer working professionally since 2021. Core contributor on Yellowstone Unleashed (80M+ visits), solo developer on Race Through Time, and systems engineer across nine shipped titles.">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="AZ9tumas — Roblox Game Developer">
-  <meta property="og:description" content="Roblox game developer since 2021 with 92M+ combined visits across shipped titles, including Yellowstone Unleashed (80M+). Open for commissions.">
-  <meta name="theme-color" content="#070a12">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%A6%96%3C/text%3E%3C/svg%3E">
+  <meta property="og:title" content="AZ9tumas — Roblox Gameplay & Systems Programmer">
+  <meta property="og:description" content="Core contributor on Yellowstone Unleashed (80M+ visits), solo developer on Race Through Time, and systems engineer across nine shipped titles. Open for commissions.">
+  <meta name="theme-color" content="#0a0b0d">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='14'%20fill='%230a0b0d'/%3E%3Crect%20x='1'%20y='1'%20width='62'%20height='62'%20rx='13'%20fill='none'%20stroke='%232a2e36'%20stroke-width='2'/%3E%3Ctext%20x='32'%20y='42'%20font-family='ui-monospace,monospace'%20font-size='24'%20font-weight='700'%20fill='%237aa2f7'%20text-anchor='middle'%3EA9%3C/text%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -24,15 +24,15 @@
         <span class="brand-name" id="brand-name">AZ9tumas</span>
       </a>
       <nav class="nav-links" id="nav-links" aria-label="Main navigation">
-        <a href="#games">Games</a>
-        <a href="#showcase">Showcase</a>
-        <a href="#tech">Tech</a>
+        <a href="#work">Work</a>
+        <a href="#case-studies">Case studies</a>
+        <a href="#stack">Stack</a>
         <a href="#about">About</a>
         <a href="#contact">Contact</a>
-        <a href="#contact" class="btn btn-primary btn-sm nav-cta">Hire Me</a>
+        <a href="#contact" class="btn btn-ghost btn-sm nav-cta">Get in touch</a>
       </nav>
       <button class="burger" id="burger" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-links">
-        <span></span><span></span><span></span>
+        <span></span><span></span>
       </button>
     </div>
   </header>
@@ -49,55 +49,55 @@
 
     <!-- ============ HERO ============ -->
     <section class="hero" id="hero">
-      <canvas id="fx" aria-hidden="true"></canvas>
       <div class="container hero-inner">
         <span class="avail"><span class="dot" aria-hidden="true"></span><span id="avail-text">Open for commissions</span></span>
         <h1 id="hero-title"></h1>
         <p class="hero-sub" id="hero-sub"></p>
         <div class="hero-ctas">
-          <a href="#games" class="btn btn-primary">View my work</a>
+          <a href="#work" class="btn btn-primary">View shipped work</a>
           <a href="#contact" class="btn btn-ghost">Get in touch</a>
         </div>
-        <div class="stats-row" id="stats-row"></div>
+        <div class="stats-band" id="stats-band"></div>
       </div>
     </section>
 
-    <!-- ============ GAMES ============ -->
-    <section class="section" id="games">
+    <!-- ============ SHIPPED WORK ============ -->
+    <section class="section" id="work">
       <div class="container">
         <div class="sec-head reveal">
-          <span class="eyebrow">Shipped Work</span>
-          <h2>Games with real players.</h2>
-          <p class="sec-sub">From an 80M-visit flagship to viral hits — titles I've built and helped bring to life on Roblox.</p>
+          <span class="eyebrow">01 — Shipped work</span>
+          <h2>Production titles, precise credits.</h2>
+          <p class="sec-sub">Games with real players — each card states exactly what I built, from core contributions on an 80M-visit title to full refactors of live codebases.</p>
         </div>
         <div id="featured-slot"></div>
-        <div class="games-grid" id="games-grid"></div>
+        <div class="work-grid" id="work-grid"></div>
+        <div id="more-note-slot"></div>
       </div>
     </section>
 
-    <!-- ============ SHOWCASE ============ -->
-    <section class="section alt" id="showcase">
+    <!-- ============ CASE STUDIES ============ -->
+    <section class="section alt" id="case-studies">
       <div class="container">
         <div class="sec-head reveal">
-          <span class="eyebrow">Engineering Showcase</span>
-          <h2>Systems, in motion.</h2>
-          <p class="sec-sub">Real footage of the systems I build — click any card to watch. Series cards let you flip between iterations of the same project.</p>
+          <span class="eyebrow">02 — Case studies &amp; footage</span>
+          <h2>Systems, recorded from real builds.</h2>
+          <p class="sec-sub">The featured study is my strongest end-to-end credit. Multi-part cards show one project at two stages of development — switch chapters inside the card.</p>
         </div>
-        <div class="filters reveal" id="filters" role="group" aria-label="Filter showcase by category"></div>
-        <div class="showcase-grid" id="showcase-grid"></div>
+        <div id="cs-featured-slot"></div>
+        <div id="cs-groups"></div>
       </div>
     </section>
 
-    <!-- ============ TECH ============ -->
-    <section class="section" id="tech">
+    <!-- ============ STACK ============ -->
+    <section class="section" id="stack">
       <div class="container">
         <div class="sec-head reveal">
-          <span class="eyebrow">Toolkit</span>
-          <h2>Battle-tested stack.</h2>
-          <p class="sec-sub">The frameworks and skills behind every project I ship.</p>
+          <span class="eyebrow">03 — Stack</span>
+          <h2>Frameworks and practices.</h2>
+          <p class="sec-sub">The architecture and disciplines behind the work.</p>
         </div>
         <div class="fw-grid" id="fw-grid"></div>
-        <div class="skills reveal" id="skills"></div>
+        <ul class="skill-list reveal" id="skills" aria-label="Skills"></ul>
       </div>
     </section>
 
@@ -105,8 +105,8 @@
     <section class="section alt" id="about">
       <div class="container">
         <div class="sec-head reveal">
-          <span class="eyebrow">About</span>
-          <h2>The developer behind the games.</h2>
+          <span class="eyebrow">04 — About</span>
+          <h2>The developer behind the credits.</h2>
         </div>
         <div class="about-grid">
           <div class="about-copy reveal" id="about-copy"></div>
@@ -118,12 +118,14 @@
     <!-- ============ CONTACT ============ -->
     <section class="section" id="contact">
       <div class="container">
-        <div class="sec-head center reveal">
-          <span class="eyebrow">Contact</span>
-          <h2>Let's build your next hit.</h2>
-          <p class="sec-sub">Commissions are open. Reach out on Discord for the fastest reply.</p>
+        <div class="sec-head reveal">
+          <span class="eyebrow">05 — Contact</span>
+          <h2>Commissions are open.</h2>
         </div>
-        <div class="contact-grid" id="contact-grid"></div>
+        <div class="contact-grid">
+          <div class="contact-copy reveal" id="contact-copy"></div>
+          <div class="contact-card reveal" id="contact-card"></div>
+        </div>
       </div>
     </section>
   </main>
@@ -132,11 +134,11 @@
     <div class="container foot-inner">
       <div class="foot-left">
         <span class="foot-name" id="foot-name">AZ9tumas</span>
-        <span class="foot-tag" id="foot-tag">Roblox Game Developer</span>
+        <span class="foot-tag" id="foot-tag">Roblox Gameplay &amp; Systems Programmer</span>
       </div>
       <nav class="foot-links" aria-label="Footer navigation">
-        <a href="#games">Games</a>
-        <a href="#showcase">Showcase</a>
+        <a href="#work">Work</a>
+        <a href="#case-studies">Case studies</a>
         <a href="#contact">Contact</a>
       </nav>
       <span class="foot-copy">© <span id="foot-year">2026</span> <span id="foot-name-2">AZ9tumas</span></span>
