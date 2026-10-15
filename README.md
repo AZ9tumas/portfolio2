@@ -24,7 +24,7 @@ Every project and case study carries a `role` badge stating the exact scope of t
 
 ### Themes
 
-The layout follows Apple Music (sidebar, artist header, credits track list, mini player, phone tab bar) using a Liquid Glass material and squircle corners. Dark (default) and light appearances; visitors switch in the sidebar or the phone top bar, and the choice is remembered. All colours are tokens at the top of [css/style.css](css/style.css) — `--red` is the accent.
+The layout follows Apple Music (sidebar, artist header, credits track list, mini player, phone tab bar) using a Liquid Glass material and squircle corners. In Chrome, Edge and other Chromium browsers the glass also refracts the page behind it at its edges (a per-element SVG displacement map built in `js/main.js`); Safari and Firefox get the frosted version. Dark (default) and light appearances; visitors switch in the sidebar or the phone top bar, and the choice is remembered. All colours are tokens at the top of [css/style.css](css/style.css) — `--red` is the accent.
 
 ### Icons
 

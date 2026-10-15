@@ -338,6 +338,7 @@
 
     document.documentElement.style.overflow = "hidden";
     dlg.showModal();
+    refract(body);
     close.focus();
   }
 
@@ -642,8 +643,12 @@
     const targets = [["top", artist]].concat(
       ["work", "videos", "stack", "about", "contact"].map((id) => [id, document.getElementById(id)]));
     const byEl = new Map(targets.map(([id, node]) => [node, id]));
-    const setActive = (id) =>
+    const lenses = [makeLens($(".side-nav"), "y"), makeLens($("#tabbar"), "x")];
+    const setActive = (id) => {
       $$("[data-spy]").forEach((a) => a.classList.toggle("active", a.dataset.spy === id));
+      lenses.forEach((l) => l.moveTo($('[data-spy="' + id + '"]', l.host)));
+    };
+    window.addEventListener("resize", () => lenses.forEach((l) => l.refresh()));
     const spy = new IntersectionObserver((entries) => {
       entries.forEach((en) => { if (en.isIntersecting) setActive(byEl.get(en.target)); });
     }, { rootMargin: "-40% 0px -55% 0px" });
@@ -683,6 +688,162 @@
     }, { passive: true });
   }
 
+  /* ==========================================================
+     LIQUID GLASS: the droplet behind the active nav item / tab
+     ========================================================== */
+  // A glass "lens" that slides to the active item and stretches like a
+  // droplet on the way (squashing on the cross axis), then settles.
+  function makeLens(host, axis) {
+    const lens = el("span", "lens");
+    lens.setAttribute("aria-hidden", "true");
+    host.prepend(lens);
+    let current = null;
+    let pos = null;
+
+    function place(target, animate) {
+      if (!target || !target.offsetWidth) { lens.classList.remove("on"); return; }
+      const next = { x: target.offsetLeft, y: target.offsetTop };
+      lens.style.width = target.offsetWidth + "px";
+      lens.style.height = target.offsetHeight + "px";
+      const to = "translate(" + next.x + "px," + next.y + "px)";
+      if (animate && pos && !REDUCED && lens.animate) {
+        const mid = "translate(" + (pos.x + next.x) / 2 + "px," + (pos.y + next.y) / 2 + "px) " +
+          (axis === "x" ? "scale(1.28, 0.86)" : "scale(0.95, 1.32)");
+        lens.animate(
+          [{ transform: "translate(" + pos.x + "px," + pos.y + "px)" }, { transform: mid, offset: 0.45 }, { transform: to }],
+          { duration: 560, easing: "cubic-bezier(0.3, 1.25, 0.4, 1)" });
+      }
+      lens.style.transform = to;
+      lens.classList.add("on");
+      pos = next;
+    }
+
+    return {
+      host,
+      moveTo(target) {
+        if (target === current) return;
+        place(target, current !== null);
+        current = target;
+      },
+      refresh() { place(current, false); },
+    };
+  }
+
+  /* ==========================================================
+     LIQUID GLASS: edge refraction (Chromium only)
+     Each glass surface gets its own SVG displacement map sized to it:
+     neutral in the middle, ramping at the rim, so the backdrop bends
+     at the edges like a thick glass lens. Other browsers keep the
+     frosted fallback from the stylesheet.
+     ========================================================== */
+  const SVG_NS = "http://www.w3.org/2000/svg";
+  const CAN_REFRACT = !!(navigator.userAgentData &&
+    navigator.userAgentData.brands.some((b) => /Chromium/.test(b.brand)));
+  let glassDefs = null;
+  let glassSeq = 0;
+  const glassRO = CAN_REFRACT && "ResizeObserver" in window
+    ? new ResizeObserver((entries) => entries.forEach((e) => buildRefraction(e.target)))
+    : null;
+
+  // Per-pixel displacement map from a rounded-rect signed distance field.
+  // Within `edge` px of the rim, R/G encode the surface normal (scaled by a
+  // falloff), so the backdrop is pulled inward and bends at the edge;
+  // everywhere else the map is neutral grey (no displacement).
+  function displacementMap(w, h, r, edge) {
+    const c = document.createElement("canvas");
+    c.width = w;
+    c.height = h;
+    const ctx = c.getContext("2d");
+    const img = ctx.createImageData(w, h);
+    const d = img.data;
+    const hw = w / 2, hh = h / 2;
+    for (let y = 0; y < h; y++) {
+      for (let x = 0; x < w; x++) {
+        const px = x + 0.5 - hw, py = y + 0.5 - hh;
+        const qx = Math.abs(px) - (hw - r), qy = Math.abs(py) - (hh - r);
+        const ox = Math.max(qx, 0), oy = Math.max(qy, 0);
+        const inside = -(Math.hypot(ox, oy) + Math.min(Math.max(qx, qy), 0) - r);
+        let nx = 0, ny = 0, m = 0;
+        if (inside >= 0 && inside < edge) {
+          m = Math.pow(1 - inside / edge, 2);
+          if (ox > 0 || oy > 0) {
+            const l = Math.hypot(ox, oy) || 1;
+            nx = (ox / l) * Math.sign(px);
+            ny = (oy / l) * Math.sign(py);
+          } else if (qx > qy) nx = Math.sign(px);
+          else ny = Math.sign(py);
+        }
+        const i = (y * w + x) * 4;
+        d[i] = 128 - nx * m * 127;
+        d[i + 1] = 128 - ny * m * 127;
+        d[i + 2] = 128;
+        d[i + 3] = 255;
+      }
+    }
+    ctx.putImageData(img, 0, 0);
+    return c.toDataURL();
+  }
+
+  function buildRefraction(node) {
+    const w = Math.round(node.offsetWidth);
+    const h = Math.round(node.offsetHeight);
+    if (!w || !h) return;
+    if (!glassDefs) {
+      const svg = document.createElementNS(SVG_NS, "svg");
+      svg.setAttribute("width", "0");
+      svg.setAttribute("height", "0");
+      svg.setAttribute("aria-hidden", "true");
+      svg.style.position = "absolute";
+      glassDefs = document.createElementNS(SVG_NS, "defs");
+      svg.append(glassDefs);
+      document.body.append(svg);
+    }
+    if (!node.dataset.glassId) node.dataset.glassId = "lg-" + (++glassSeq);
+    const id = node.dataset.glassId;
+    const r = Math.min(parseFloat(getComputedStyle(node).borderTopLeftRadius) || 0, w / 2, h / 2);
+    const edge = Math.round(Math.max(10, Math.min(36, Math.min(w, h) * 0.38)));
+    // Negative: sample outward, so the rim shows what lies just beyond it,
+    // bent around the edge.
+    const scale = -Math.round(Math.min(90, edge * 2.6));
+
+    let f = document.getElementById(id);
+    if (!f) {
+      f = document.createElementNS(SVG_NS, "filter");
+      f.id = id;
+      glassDefs.append(f);
+    }
+    f.setAttribute("x", "0");
+    f.setAttribute("y", "0");
+    f.setAttribute("width", w);
+    f.setAttribute("height", h);
+    f.setAttribute("filterUnits", "userSpaceOnUse");
+    f.setAttribute("color-interpolation-filters", "sRGB");
+    f.innerHTML =
+      '<feImage href="' + displacementMap(w, h, Math.round(r), edge) + '" x="0" y="0" width="' + w +
+      '" height="' + h + '" preserveAspectRatio="none" result="map"/>' +
+      '<feDisplacementMap in="SourceGraphic" in2="map" scale="' + scale +
+      '" xChannelSelector="R" yChannelSelector="G"/>';
+
+    const bf = "blur(var(--glass-blur, 14px)) url(#" + id + ") saturate(200%) brightness(1.08)";
+    node.style.backdropFilter = bf;
+    node.style.webkitBackdropFilter = bf;
+  }
+
+  function refract(node) {
+    if (!CAN_REFRACT || !node) return;
+    buildRefraction(node);
+    if (glassRO && !node.dataset.glassObserved) {
+      node.dataset.glassObserved = "1";
+      glassRO.observe(node);
+    }
+  }
+
+  function initLiquidGlass() {
+    if (!CAN_REFRACT) return;
+    document.documentElement.classList.add("lg-refract");
+    $$(".glass").forEach(refract);
+  }
+
   /* ---------- boot ---------- */
   try {
     renderChrome();
@@ -697,6 +858,7 @@
     initScroll();
     initReveal();
     initGlassLight();
+    initLiquidGlass();
   } catch (err) {
     console.error(err);
   }
