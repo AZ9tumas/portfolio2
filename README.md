@@ -9,9 +9,9 @@ Everything is controlled from **[config.js](config.js)** — you never need to t
 | What | Where in config.js |
 |---|---|
 | Name, monogram, tagline, availability | `profile` |
-| Hero headline, subline, stat band | `profile.heroHeadline` / `heroSub` / `heroStats` — wrap a word in `*asterisks*` in the headline for the serif-italic accent |
+| Header text and stat tiles | `profile.tagline` / `heroHeadline` / `heroSub` / `heroStats` (the header colours follow the featured project's `art`, or set `profile.heroArt`) |
 | Discord / email / payment note | `contact` (email is stored split as `emailUser` + `emailDomain`; it is only assembled in the browser when "Reveal email" is clicked and never appears in the rendered DOM before that) |
-| Projects | `projects` array — append an object to add a card; set `featured: true` on exactly one to make it the large lead card. Add `image: "assets/name.jpg"` to use a real screenshot as the card cover; without it the card gets a generated cover (tint set by optional `hue`, 0–360) |
+| Projects | `projects` array — append an object to add a card; set `featured: true` on exactly one to make it the large lead card. Each project gets album-style art from its four `art` colours; add `image: "assets/name.jpg"` to use a real screenshot instead. Clicking a project opens a detail sheet |
 | Videos / case studies | `caseStudies` array — append an object; give an entry **two or more `parts`** and it renders as one cohesive unit with a chapter switcher; entries sharing a `category` group together automatically |
 | Frameworks & skills | `frameworks` / `skills` |
 | Tab title & SEO description | `seo` |
@@ -24,11 +24,11 @@ Every project and case study carries a `role` badge stating the exact scope of t
 
 ### Themes
 
-The site ships with dark (default) and light themes. Visitors switch with the sun/moon button in the nav; the choice is remembered in their browser. All colours are tokens at the top of [css/style.css](css/style.css) — change `--accent` to re-brand both themes.
+The layout follows Apple Music (sidebar, artist header, credits track list, mini player, phone tab bar) using a Liquid Glass material and squircle corners. Dark (default) and light appearances; visitors switch in the sidebar or the phone top bar, and the choice is remembered. All colours are tokens at the top of [css/style.css](css/style.css) — `--red` is the accent.
 
 ### Icons
 
-The site uses a single inline icon family (Lucide, 1.75px stroke). Fact entries in `profile.facts` reference icons by name; available names are listed in `ICON_PATHS` at the top of [js/main.js](js/main.js). No emoji anywhere.
+The site uses a single inline icon family (Lucide, 2px rounded stroke). Fact entries in `profile.facts` reference icons by name; available names are listed in `ICON_PATHS` at the top of [js/main.js](js/main.js). No emoji anywhere.
 
 ## Preview locally
 
