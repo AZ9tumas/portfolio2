@@ -40,8 +40,7 @@ window.PORTFOLIO_CONFIG = {
     // keep the labels honest about credit scope.
     heroStats: [
       { value: "80M+",   label: "Visits — Yellowstone Unleashed" },
-      { value: "12.2M",  label: "Visits — My Pooping Pigeons" },
-      { value: "1,000+", label: "Peak concurrent players" },
+      { value: "~2.5K",  label: "Peak CCU — Build an Igloo" },
       { value: "9+",     label: "Shipped titles" },
     ],
 
@@ -112,14 +111,13 @@ window.PORTFOLIO_CONFIG = {
       featured: true,
     },
     {
-      title: "My Pooping Pigeons",
-      url: "https://www.roblox.com/games/140327715500229/My-Pooping-Pigeons",
+      title: "Build an Igloo",
+      url: "https://www.roblox.com/games/131921967019798/Build-an-Igloo",
       role: "Contributor",
       contribution:
-        "Contributor on a simulator title that reached 12.2 million visits " +
-        "and sustained peaks of over 1,000 concurrent players.",
-      stats: { visits: "12.2M", concurrents: "1,000+" },
-      tags: ["Simulator"],
+        "Worked on this title before it was sold to new owners. The game " +
+        "peaked at around 2,500 concurrent players.",
+      stats: { concurrents: "~2.5K" },
     },
     {
       title: "Catch Lucky Blocks",
