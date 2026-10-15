@@ -40,7 +40,7 @@ window.PORTFOLIO_CONFIG = {
     // keep the labels honest about credit scope.
     heroStats: [
       { value: "80M+",   label: "Visits — Yellowstone Unleashed" },
-      { value: "1,000+", label: "Peak concurrent players" },
+      { value: "~2.5K",  label: "Peak CCU — Build an Igloo" },
       { value: "9+",     label: "Shipped titles" },
     ],
 
@@ -109,6 +109,15 @@ window.PORTFOLIO_CONFIG = {
       stats: { visits: "80M+" },
       tags: ["Open world", "Survival", "Movement systems"],
       featured: true,
+    },
+    {
+      title: "Build an Igloo",
+      url: "https://www.roblox.com/games/131921967019798/Build-an-Igloo",
+      role: "Contributor",
+      contribution:
+        "Worked on this title before it was sold to new owners. The game " +
+        "peaked at around 2,500 concurrent players.",
+      stats: { concurrents: "~2.5K" },
     },
     {
       title: "Catch Lucky Blocks",
