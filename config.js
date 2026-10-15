@@ -3,6 +3,9 @@
    ==========================================================================
    Everything on the site is rendered from this file. Save, refresh, done.
 
+   Wrap a word in *asterisks* in the hero headline to give it the accent
+   (serif italic) treatment.
+
    Adding a project  -> append an object to `projects`.
    Adding a video    -> append an object to `caseStudies`.
    No HTML/CSS/JS changes are ever required.
@@ -14,7 +17,7 @@
    CREDIT ACCURACY — read before editing roles:
    Every project carries a `role` badge that states the exact scope of the
    contribution ("Core Contributor", "Solo Developer", "Refactoring
-   Engineer", "Front-End Scripter", "Contributor"). Keep these truthful —
+   Engineer", "Front-End Scripter", "Scripter"). Keep these truthful —
    precise credit scope is a professionalism signal, not a limitation.
    ========================================================================== */
 
@@ -30,7 +33,7 @@ window.PORTFOLIO_CONFIG = {
     startYear: 2021,                // {years} is computed from this
     availability: "Open for commissions",
 
-    heroHeadline: "Gameplay systems for Roblox titles that ship.",
+    heroHeadline: "Gameplay systems for Roblox titles that *ship*.",
     heroSub:
       "{years} years of production work across nine shipped titles — from the " +
       "movement system behind Yellowstone Unleashed (80M+ visits) to " +
@@ -92,6 +95,9 @@ window.PORTFOLIO_CONFIG = {
        contribution (required) 1–3 sentences stating precisely what you did
        stats        optional  { visits: "80M+", concurrents: "1,000+" }
        tags         optional  short keywords
+       image        optional  path to a screenshot, e.g. "assets/igloo.jpg";
+                    without one the card gets a generated stud-pattern cover
+       hue          optional  0–360 colour for the generated cover
        featured     true on ONE project = renders as the large lead card
        caseStudyAnchor true = adds a "Development footage" link that jumps
                     to the case-studies section
@@ -113,10 +119,11 @@ window.PORTFOLIO_CONFIG = {
     {
       title: "Build an Igloo",
       url: "https://www.roblox.com/games/131921967019798/Build-an-Igloo",
-      role: "Contributor",
+      role: "Scripter",
       contribution:
-        "Worked on this title before it was sold to new owners. The game " +
+        "Scripter on this title before it was sold to new owners. The game " +
         "peaked at around 2,500 concurrent players.",
+      tags: ["Building"],
       stats: { concurrents: "~2.5K" },
     },
     {

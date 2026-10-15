@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,18 +8,32 @@
   <meta property="og:type" content="website">
   <meta property="og:title" content="AZ9tumas — Roblox Gameplay & Systems Programmer">
   <meta property="og:description" content="Core contributor on Yellowstone Unleashed (80M+ visits), solo developer on Race Through Time, and systems engineer across nine shipped titles. Open for commissions.">
-  <meta name="theme-color" content="#0a0b0d">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='14'%20fill='%230a0b0d'/%3E%3Crect%20x='1'%20y='1'%20width='62'%20height='62'%20rx='13'%20fill='none'%20stroke='%232a2e36'%20stroke-width='2'/%3E%3Ctext%20x='32'%20y='42'%20font-family='ui-monospace,monospace'%20font-size='24'%20font-weight='700'%20fill='%237aa2f7'%20text-anchor='middle'%3EA9%3C/text%3E%3C/svg%3E">
+  <meta name="theme-color" content="#08090a">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='14'%20fill='%23c8f04a'/%3E%3Ctext%20x='32'%20y='42'%20font-family='ui-monospace,monospace'%20font-size='24'%20font-weight='700'%20fill='%230b0d05'%20text-anchor='middle'%3EA9%3C/text%3E%3C/svg%3E">
+
+  <!-- Apply the saved theme before first paint so there is no flash. -->
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("theme");
+        if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t);
+      } catch (e) {}
+    })();
+  </script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
+  <a class="skip-link" href="#work">Skip to content</a>
+  <div class="progress" id="progress" aria-hidden="true"></div>
+
   <header class="nav" id="nav">
-    <div class="container nav-inner">
-      <a class="brand" href="#top">
+    <div class="nav-shell">
+      <a class="brand" href="#top" aria-label="Back to top">
         <span class="brand-mark" id="brand-mark">A9</span>
         <span class="brand-name" id="brand-name">AZ9tumas</span>
       </a>
@@ -29,17 +43,20 @@
         <a href="#stack">Stack</a>
         <a href="#about">About</a>
         <a href="#contact">Contact</a>
-        <a href="#contact" class="btn btn-ghost btn-sm nav-cta">Get in touch</a>
       </nav>
-      <button class="burger" id="burger" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-links">
-        <span></span><span></span>
-      </button>
+      <div class="nav-actions">
+        <button class="icon-btn" id="theme-toggle" type="button" aria-label="Switch to light theme"></button>
+        <a href="#contact" class="btn btn-primary btn-sm nav-cta">Hire me</a>
+        <button class="burger" id="burger" type="button" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-links">
+          <span></span><span></span>
+        </button>
+      </div>
     </div>
   </header>
 
   <main id="top">
     <noscript>
-      <style>.reveal{opacity:1 !important;transform:none !important}</style>
+      <style>.reveal{opacity:1 !important;transform:none !important;filter:none !important}</style>
       <div class="noscript-box">
         This portfolio needs JavaScript to render. In the meantime:
         <a href="https://www.roblox.com/games/12054551325/Yellowstone-Unleashed">Yellowstone Unleashed</a> ·
@@ -49,26 +66,55 @@
 
     <!-- ============ HERO ============ -->
     <section class="hero" id="hero">
-      <div class="container hero-inner">
-        <span class="avail"><span class="dot" aria-hidden="true"></span><span id="avail-text">Open for commissions</span></span>
-        <h1 id="hero-title"></h1>
-        <p class="hero-sub" id="hero-sub"></p>
-        <div class="hero-ctas">
-          <a href="#work" class="btn btn-primary">View shipped work</a>
-          <a href="#contact" class="btn btn-ghost">Get in touch</a>
+      <canvas class="hero-canvas" id="stud-field" aria-hidden="true"></canvas>
+      <div class="hero-glow" aria-hidden="true"></div>
+
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <span class="avail"><span class="pulse" aria-hidden="true"></span><span id="avail-text">Open for commissions</span></span>
+          <h1 id="hero-title"></h1>
+          <p class="hero-sub" id="hero-sub"></p>
+          <div class="hero-ctas">
+            <a href="#work" class="btn btn-primary btn-lg" id="hero-cta-work">View shipped work</a>
+            <a class="btn btn-ghost btn-lg" id="hero-cta-discord">Message on Discord</a>
+          </div>
         </div>
-        <div class="stats-band" id="stats-band"></div>
+
+        <div class="hero-visual" aria-hidden="true">
+          <div class="editor">
+            <div class="editor-bar">
+              <span class="editor-dots"><i></i><i></i><i></i></span>
+              <span class="editor-tab" id="editor-tab"></span>
+              <span class="editor-lang">Luau</span>
+            </div>
+            <pre class="editor-body" id="editor-body"><code id="editor-code"></code></pre>
+            <div class="editor-status">
+              <span><i class="status-dot"></i>Studio · Live</span>
+              <span>0 warnings</span>
+            </div>
+          </div>
+          <div class="float-chip chip-a" id="chip-a"></div>
+          <div class="float-chip chip-b" id="chip-b"></div>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="stats" id="stats"></div>
       </div>
     </section>
+
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track" id="marquee"></div>
+    </div>
 
     <!-- ============ SHIPPED WORK ============ -->
     <section class="section" id="work">
       <div class="container">
-        <div class="sec-head reveal">
-          <span class="eyebrow">01 — Shipped work</span>
-          <h2>Production titles, precise credits.</h2>
-          <p class="sec-sub">Games with real players — each card states exactly what I built, from core contributions on an 80M-visit title to full refactors of live codebases.</p>
-        </div>
+        <header class="sec-head reveal">
+          <div class="sec-index"><span class="sec-num">01</span><span class="eyebrow">Selected work</span></div>
+          <h2>Production titles, <em>precise</em> credits.</h2>
+          <p class="sec-sub">Games with real players. Each card states exactly what I built — from core systems on an 80M-visit title to full refactors of live codebases.</p>
+        </header>
         <div id="featured-slot"></div>
         <div class="work-grid" id="work-grid"></div>
         <div id="more-note-slot"></div>
@@ -76,13 +122,13 @@
     </section>
 
     <!-- ============ CASE STUDIES ============ -->
-    <section class="section alt" id="case-studies">
+    <section class="section section-alt" id="case-studies">
       <div class="container">
-        <div class="sec-head reveal">
-          <span class="eyebrow">02 — Case studies &amp; footage</span>
-          <h2>Systems, recorded from real builds.</h2>
-          <p class="sec-sub">The featured study is my strongest end-to-end credit. Multi-part cards show one project at two stages of development — switch chapters inside the card.</p>
-        </div>
+        <header class="sec-head reveal">
+          <div class="sec-index"><span class="sec-num">02</span><span class="eyebrow">Case studies &amp; footage</span></div>
+          <h2>Systems, <em>recorded</em> from real builds.</h2>
+          <p class="sec-sub">The featured study is my strongest end-to-end credit. Multi-part cards show one project at different stages — switch chapters inside the card.</p>
+        </header>
         <div id="cs-featured-slot"></div>
         <div id="cs-groups"></div>
       </div>
@@ -91,26 +137,25 @@
     <!-- ============ STACK ============ -->
     <section class="section" id="stack">
       <div class="container">
-        <div class="sec-head reveal">
-          <span class="eyebrow">03 — Stack</span>
-          <h2>Frameworks and practices.</h2>
-          <p class="sec-sub">The architecture and disciplines behind the work.</p>
-        </div>
-        <div class="fw-grid" id="fw-grid"></div>
-        <ul class="skill-list reveal" id="skills" aria-label="Skills"></ul>
+        <header class="sec-head reveal">
+          <div class="sec-index"><span class="sec-num">03</span><span class="eyebrow">Stack</span></div>
+          <h2>The <em>foundations</em> behind the work.</h2>
+          <p class="sec-sub">Proven frameworks for architecture and data, and the disciplines I bring to every codebase.</p>
+        </header>
+        <div class="bento" id="bento"></div>
       </div>
     </section>
 
     <!-- ============ ABOUT ============ -->
-    <section class="section alt" id="about">
+    <section class="section section-alt" id="about">
       <div class="container">
-        <div class="sec-head reveal">
-          <span class="eyebrow">04 — About</span>
-          <h2>The developer behind the credits.</h2>
-        </div>
+        <header class="sec-head reveal">
+          <div class="sec-index"><span class="sec-num">04</span><span class="eyebrow">About</span></div>
+          <h2>The developer <em>behind</em> the credits.</h2>
+        </header>
         <div class="about-grid">
           <div class="about-copy reveal" id="about-copy"></div>
-          <ul class="facts-card reveal" id="about-facts"></ul>
+          <ul class="facts reveal" id="about-facts"></ul>
         </div>
       </div>
     </section>
@@ -118,30 +163,36 @@
     <!-- ============ CONTACT ============ -->
     <section class="section" id="contact">
       <div class="container">
-        <div class="sec-head reveal">
-          <span class="eyebrow">05 — Contact</span>
-          <h2>Commissions are open.</h2>
-        </div>
-        <div class="contact-grid">
-          <div class="contact-copy reveal" id="contact-copy"></div>
-          <div class="contact-card reveal" id="contact-card"></div>
+        <div class="cta-panel reveal">
+          <div class="cta-glow" aria-hidden="true"></div>
+          <div class="sec-index"><span class="sec-num">05</span><span class="eyebrow">Contact</span></div>
+          <h2>Let's build something players <em>remember</em>.</h2>
+          <p class="cta-sub" id="contact-copy"></p>
+          <div class="cta-actions" id="contact-actions"></div>
+          <div class="email-zone" id="email-zone"></div>
+          <div class="cta-foot" id="contact-foot"></div>
         </div>
       </div>
     </section>
   </main>
 
   <footer class="footer">
-    <div class="container foot-inner">
-      <div class="foot-left">
-        <span class="foot-name" id="foot-name">AZ9tumas</span>
-        <span class="foot-tag" id="foot-tag">Roblox Gameplay &amp; Systems Programmer</span>
+    <div class="container">
+      <div class="foot-row">
+        <div class="foot-left">
+          <span class="foot-name" id="foot-name">AZ9tumas</span>
+          <span class="foot-tag" id="foot-tag">Roblox Gameplay &amp; Systems Programmer</span>
+        </div>
+        <nav class="foot-links" aria-label="Footer navigation">
+          <a href="#work">Work</a>
+          <a href="#case-studies">Case studies</a>
+          <a href="#stack">Stack</a>
+          <a href="#contact">Contact</a>
+        </nav>
+        <a class="to-top" href="#top" id="to-top">Back to top</a>
       </div>
-      <nav class="foot-links" aria-label="Footer navigation">
-        <a href="#work">Work</a>
-        <a href="#case-studies">Case studies</a>
-        <a href="#contact">Contact</a>
-      </nav>
-      <span class="foot-copy">© <span id="foot-year">2026</span> <span id="foot-name-2">AZ9tumas</span></span>
+      <div class="wordmark" id="wordmark" aria-hidden="true">AZ9tumas</div>
+      <div class="foot-copy">© <span id="foot-year">2026</span> <span id="foot-name-2">AZ9tumas</span>. All rights reserved.</div>
     </div>
   </footer>
 
