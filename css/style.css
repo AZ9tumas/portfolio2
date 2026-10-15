@@ -24,11 +24,15 @@
   --sep: rgba(84, 84, 88, 0.55);
   --red: #fa2d48;
   --red-soft: rgba(250, 45, 72, 0.16);
-  --glass: rgba(38, 38, 42, 0.46);
+  --glass: rgba(40, 40, 46, 0.26);
   --glass-strong: rgba(28, 28, 30, 0.7);
-  --glass-edge: rgba(255, 255, 255, 0.14);
-  --glass-hi: rgba(255, 255, 255, 0.32);
-  --glass-lo: rgba(255, 255, 255, 0.04);
+  --glass-hi: rgba(255, 255, 255, 0.55);
+  --glass-rim-2: rgba(255, 255, 255, 0.22);
+  --glass-inner: rgba(255, 255, 255, 0.06);
+  --glass-glare: 0.2;
+  --rim-a: 0.75;
+  --rim-b: 0.4;
+  --lens-bg: rgba(255, 255, 255, 0.12);
   --glass-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0, 0, 0, 0.3);
   --ambient: 0.32;
   --scrim: rgba(0, 0, 0, 0.72);
@@ -48,11 +52,15 @@
   --sep: rgba(60, 60, 67, 0.2);
   --red: #fa243c;
   --red-soft: rgba(250, 36, 60, 0.1);
-  --glass: rgba(255, 255, 255, 0.5);
+  --glass: rgba(255, 255, 255, 0.3);
   --glass-strong: rgba(255, 255, 255, 0.76);
-  --glass-edge: rgba(255, 255, 255, 0.8);
-  --glass-hi: rgba(255, 255, 255, 0.95);
-  --glass-lo: rgba(0, 0, 0, 0.03);
+  --glass-hi: rgba(255, 255, 255, 1);
+  --glass-rim-2: rgba(255, 255, 255, 0.7);
+  --glass-inner: rgba(255, 255, 255, 0.35);
+  --glass-glare: 0.45;
+  --rim-a: 1;
+  --rim-b: 0.8;
+  --lens-bg: rgba(255, 255, 255, 0.55);
   --glass-shadow: 0 12px 40px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.06);
   --ambient: 0.22;
   --scrim: rgba(0, 0, 0, 0.55);
@@ -132,20 +140,26 @@ h1, h2, h3 { font-weight: 700; letter-spacing: -0.022em; line-height: 1.12; text
   .sq { corner-shape: squircle; border-radius: calc(var(--r, 16px) * 1.75); }
 }
 
-/* Liquid Glass: blurred, saturated backdrop, a bright specular rim on top,
-   a soft inner glow, and a highlight that follows the pointer. */
+/* Liquid Glass
+   - a clear, lightly blurred and saturated backdrop
+   - in Chromium, the backdrop is also refracted at the edges by a per-element
+     SVG displacement map (set up by initLiquidGlass() in main.js)
+   - a bright specular rim: strong top-left, softer bottom-right
+   - an inner glow, and a highlight that follows the pointer             */
 .glass {
   position: relative;
   isolation: isolate;
   background: var(--glass);
-  -webkit-backdrop-filter: blur(28px) saturate(190%) brightness(1.05);
-  backdrop-filter: blur(28px) saturate(190%) brightness(1.05);
+  -webkit-backdrop-filter: blur(var(--glass-blur, 14px)) saturate(200%) brightness(1.08);
+  backdrop-filter: blur(var(--glass-blur, 14px)) saturate(200%) brightness(1.08);
+  /* Inset light only. The outer drop shadow lives on ::before: Chrome
+     misplaces SVG backdrop filters on elements with an outer box-shadow. */
   box-shadow:
-    inset 0 1px 0 0 var(--glass-hi),
-    inset 0 -1px 0 0 var(--glass-lo),
-    inset 0 0 0 1px var(--glass-edge),
-    var(--glass-shadow);
+    inset 1.5px 1.5px 1px -0.5px var(--glass-hi),
+    inset -1px -1px 1px -0.5px var(--glass-rim-2),
+    inset 0 0 22px 0 var(--glass-inner);
 }
+/* pointer highlight + top sheen */
 .glass::before {
   content: "";
   position: absolute;
@@ -154,13 +168,56 @@ h1, h2, h3 { font-weight: 700; letter-spacing: -0.022em; line-height: 1.12; text
   border-radius: inherit;
   pointer-events: none;
   background:
-    radial-gradient(120px 80px at var(--gx, 30%) var(--gy, 0%), rgba(255, 255, 255, 0.16), transparent 70%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0) 45%);
-  transition: opacity 0.3s ease;
+    radial-gradient(160px 110px at var(--gx, 25%) var(--gy, 0%), rgba(255, 255, 255, var(--glass-glare)), transparent 70%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0) 40%);
+  box-shadow: var(--glass-shadow);
+}
+/* gradient rim: light catches the top-left and bottom-right edges */
+.glass::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  padding: 1px;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(135deg,
+    rgba(255, 255, 255, var(--rim-a)) 0%,
+    rgba(255, 255, 255, 0.08) 28%,
+    rgba(255, 255, 255, 0) 50%,
+    rgba(255, 255, 255, 0.06) 72%,
+    rgba(255, 255, 255, var(--rim-b)) 100%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
 }
 @supports (corner-shape: squircle) {
   .glass { corner-shape: squircle; }
 }
+/* With SVG refraction on (Chromium), any outer shadow on the element or its
+   pseudo-elements shifts the filter, so depth comes from the rim instead. */
+.lg-refract .glass::before { box-shadow: none; }
+
+/* The moving "droplet" behind the active nav item / tab. */
+.lens {
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  left: 0;
+  border-radius: 12px;
+  pointer-events: none;
+  background: var(--lens-bg);
+  box-shadow:
+    inset 1px 1px 1px -0.5px rgba(255, 255, 255, 0.6),
+    inset -1px -1px 1px -0.5px rgba(255, 255, 255, 0.25),
+    inset 0 0 12px rgba(255, 255, 255, 0.08),
+    0 4px 14px rgba(0, 0, 0, 0.18);
+  -webkit-backdrop-filter: blur(2px) saturate(160%) brightness(1.15);
+  backdrop-filter: blur(2px) saturate(160%) brightness(1.15);
+  opacity: 0;
+  will-change: transform, width, height;
+}
+.lens.on { opacity: 1; }
 
 .ambient {
   position: fixed;
@@ -270,6 +327,7 @@ h1, h2, h3 { font-weight: 700; letter-spacing: -0.022em; line-height: 1.12; text
 /* ---------- sidebar ---------- */
 .sidebar {
   --r: 22px;
+  --glass-blur: 16px;
   position: sticky;
   top: var(--gap);
   display: flex;
@@ -278,7 +336,6 @@ h1, h2, h3 { font-weight: 700; letter-spacing: -0.022em; line-height: 1.12; text
   margin: var(--gap) 0 var(--gap) var(--gap);
   padding: 14px 10px 10px;
   border-radius: 22px;
-  overflow: hidden;
 }
 @supports (corner-shape: squircle) { .sidebar { border-radius: 38px; } }
 
@@ -311,7 +368,8 @@ h1, h2, h3 { font-weight: 700; letter-spacing: -0.022em; line-height: 1.12; text
 }
 .live-dot { width: 7px; height: 7px; border-radius: 50%; background: #30d158; box-shadow: 0 0 0 3px rgba(48, 209, 88, 0.2); }
 
-.side-nav { flex: 1; overflow-y: auto; scrollbar-width: none; padding-bottom: 8px; }
+.side-nav { position: relative; flex: 1; overflow-y: auto; scrollbar-width: none; padding-bottom: 8px; }
+.side-nav > a, .side-nav > p, .side-nav > div { position: relative; z-index: 1; }
 .side-nav::-webkit-scrollbar { display: none; }
 .side-label {
   padding: 14px 10px 6px;
@@ -334,8 +392,10 @@ h1, h2, h3 { font-weight: 700; letter-spacing: -0.022em; line-height: 1.12; text
   transition: background-color 0.2s ease;
 }
 .side-link .ic { font-size: 1.12rem; color: var(--red); }
+.side-link { transition: background-color 0.2s ease, transform 0.35s var(--spring); }
+.side-link:active { transform: scale(0.97); }
 .side-link:hover, .side-proj:hover { background: var(--fill-3); }
-.side-link.active { background: var(--fill-2); }
+.side-link.active { font-weight: 600; }
 .side-proj { color: var(--label-2); }
 .side-proj:hover { color: var(--label); }
 .side-proj .art { width: 26px; height: 26px; flex-shrink: 0; font-size: 6px; }
@@ -642,6 +702,7 @@ main section[id] { scroll-margin-top: 24px; }
 .cs-featured .media-frame { aspect-ratio: 21 / 9; }
 .cs-feat-panel {
   --r: 18px;
+  --glass-blur: 6px;
   position: absolute;
   left: 18px;
   bottom: 18px;
@@ -649,9 +710,8 @@ main section[id] { scroll-margin-top: 24px; }
   width: min(440px, calc(100% - 36px));
   padding: 18px 20px;
   color: #fff;
-  --glass: rgba(20, 20, 22, 0.42);
-  --glass-edge: rgba(255, 255, 255, 0.16);
-  --glass-hi: rgba(255, 255, 255, 0.34);
+  --glass: rgba(20, 20, 22, 0.3);
+  --glass-hi: rgba(255, 255, 255, 0.55);
 }
 .cs-feat-panel .eyebrow { color: rgba(255, 255, 255, 0.7); font-size: 0.74rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
 .cs-feat-panel h3 { margin: 2px 0 6px; font-size: 1.35rem; }
@@ -699,6 +759,7 @@ main section[id] { scroll-margin-top: 24px; }
 .seg-btn.active { background: var(--bg-3); color: var(--label); box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18); }
 [data-theme="light"] .seg-btn.active { background: #fff; }
 [data-theme="light"] .sheet-body { --glass: rgba(255, 255, 255, 0.9); }
+[data-theme="light"] .player { --glass: rgba(255, 255, 255, 0.5); }
 
 /* ---------- stack ---------- */
 .fw-row {
@@ -824,6 +885,7 @@ a.row:hover, button.row:hover { background: var(--fill-3); }
 /* ---------- mini player ---------- */
 .player {
   --r: 20px;
+  --glass-blur: 7px;
   position: fixed;
   z-index: 90;
   left: calc(var(--side-w) + var(--gap) + (100vw - var(--side-w) - var(--gap)) / 2);
@@ -835,7 +897,6 @@ a.row:hover, button.row:hover { background: var(--fill-3); }
   padding: 8px 8px 8px 8px;
   border-radius: 20px;
   transform: translateX(-50%);
-  overflow: hidden;
 }
 @supports (corner-shape: squircle) { .player { border-radius: 34px; } }
 .player-art {
@@ -920,6 +981,7 @@ a.row:hover, button.row:hover { background: var(--fill-3); }
 
 .sheet-body {
   --glass: rgba(30, 30, 32, 0.88);
+  --glass-blur: 30px;
   max-height: inherit;
   overflow-y: auto;
   padding: 26px;
@@ -981,6 +1043,7 @@ a.row:hover, button.row:hover { background: var(--fill-3); }
 
   .topbar {
     --r: 18px;
+    --glass-blur: 6px;
     position: fixed;
     z-index: 80;
     top: 8px;
@@ -998,10 +1061,10 @@ a.row:hover, button.row:hover { background: var(--fill-3); }
   .topbar:not(.show) {
     background: transparent;
     box-shadow: none;
-    -webkit-backdrop-filter: none;
-    backdrop-filter: none;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
   }
-  .topbar:not(.show)::before { opacity: 0; }
+  .topbar:not(.show)::before, .topbar:not(.show)::after { opacity: 0; }
   .topbar-title { font-weight: 600; font-size: 0.98rem; opacity: 0; transition: opacity 0.3s ease; }
   .topbar.show .topbar-title { opacity: 1; }
   .topbar:not(.show) .glass-btn {
@@ -1047,6 +1110,7 @@ a.row:hover, button.row:hover { background: var(--fill-3); }
 
   .tabbar {
     --r: 30px;
+    --glass-blur: 4px;
     position: fixed;
     z-index: 90;
     left: 12px;
@@ -1071,7 +1135,10 @@ a.row:hover, button.row:hover { background: var(--fill-3); }
     transition: background-color 0.25s ease, color 0.25s ease;
   }
   .tabbar a .ic { font-size: 1.3rem; }
-  .tabbar a.active { color: var(--red); background: var(--fill-3); }
+  .tabbar a { position: relative; z-index: 1; transition: color 0.25s ease, transform 0.35s var(--spring); }
+  .tabbar a:active { transform: scale(0.9); }
+  .tabbar a.active { color: var(--red); }
+  .tabbar .lens { border-radius: 999px; }
 }
 
 @media (max-width: 600px) {
