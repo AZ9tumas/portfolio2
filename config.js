@@ -40,7 +40,6 @@ window.PORTFOLIO_CONFIG = {
     // keep the labels honest about credit scope.
     heroStats: [
       { value: "80M+",   label: "Visits — Yellowstone Unleashed" },
-      { value: "12.2M",  label: "Visits — My Pooping Pigeons" },
       { value: "1,000+", label: "Peak concurrent players" },
       { value: "9+",     label: "Shipped titles" },
     ],
@@ -110,16 +109,6 @@ window.PORTFOLIO_CONFIG = {
       stats: { visits: "80M+" },
       tags: ["Open world", "Survival", "Movement systems"],
       featured: true,
-    },
-    {
-      title: "My Pooping Pigeons",
-      url: "https://www.roblox.com/games/140327715500229/My-Pooping-Pigeons",
-      role: "Contributor",
-      contribution:
-        "Contributor on a simulator title that reached 12.2 million visits " +
-        "and sustained peaks of over 1,000 concurrent players.",
-      stats: { visits: "12.2M", concurrents: "1,000+" },
-      tags: ["Simulator"],
     },
     {
       title: "Catch Lucky Blocks",
