@@ -96,8 +96,9 @@ window.PORTFOLIO_CONFIG = {
        stats        optional  { visits: "80M+", concurrents: "1,000+" }
        tags         optional  short keywords
        image        optional  path to a screenshot, e.g. "assets/igloo.jpg";
-                    without one the card gets a generated stud-pattern cover
-       hue          optional  0–360 colour for the generated cover
+                    without one the card gets generated album-style art
+       art          optional  four colours for the generated album-style
+                    cover, e.g. ["#f4a259", "#e76f51", "#264653", "#2a9d8f"]
        featured     true on ONE project = renders as the large lead card
        caseStudyAnchor true = adds a "Development footage" link that jumps
                     to the case-studies section
@@ -114,6 +115,7 @@ window.PORTFOLIO_CONFIG = {
         "still climbing.",
       stats: { visits: "80M+" },
       tags: ["Open world", "Survival", "Movement systems"],
+      art: ["#f4a259", "#e76f51", "#1b3a34", "#5a8f3d"],
       featured: true,
     },
     {
@@ -125,6 +127,7 @@ window.PORTFOLIO_CONFIG = {
         "peaked at around 2,500 concurrent players.",
       tags: ["Building"],
       stats: { concurrents: "~2.5K" },
+      art: ["#e0f2fe", "#7dd3fc", "#1e3a8a", "#38bdf8"],
     },
     {
       title: "Catch Lucky Blocks",
@@ -135,6 +138,7 @@ window.PORTFOLIO_CONFIG = {
         "carry out a major refactor across both the front end and back end, " +
         "improving structure, reliability and maintainability of a live game.",
       tags: ["Systems refactor", "Live codebase"],
+      art: ["#ffd60a", "#ff7b00", "#9d0208", "#ffb703"],
     },
     {
       title: "My Mutant Anime",
@@ -144,6 +148,7 @@ window.PORTFOLIO_CONFIG = {
         "Scripted the front end of this anime collector title — client-side " +
         "gameplay flow, UI and presentation.",
       tags: ["Collector", "UI & client systems"],
+      art: ["#ff99c8", "#f72585", "#240046", "#7209b7"],
       caseStudyAnchor: true,
     },
   ],
@@ -244,6 +249,7 @@ window.PORTFOLIO_CONFIG = {
     {
       name: "Knit",
       tagline: "Game architecture",
+      art: ["#a5b4fc", "#6366f1", "#1e1b4b", "#818cf8"],
       url: "https://sleitnick.github.io/Knit/",
       description:
         "Backbone for structured, maintainable codebases — Services on the " +
@@ -252,6 +258,7 @@ window.PORTFOLIO_CONFIG = {
     {
       name: "ProfileService",
       tagline: "Data persistence",
+      art: ["#86efac", "#22c55e", "#052e16", "#4ade80"],
       url: "https://madstudioroblox.github.io/ProfileService/",
       description:
         "Session-locked player profiles that prevent duplication and data " +

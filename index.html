@@ -2,14 +2,14 @@
 <html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>AZ9tumas — Roblox Gameplay & Systems Programmer</title>
   <meta name="description" content="Roblox game programmer working professionally since 2021. Core contributor on Yellowstone Unleashed (80M+ visits), solo developer on Race Through Time, and systems engineer across nine shipped titles.">
   <meta property="og:type" content="website">
   <meta property="og:title" content="AZ9tumas — Roblox Gameplay & Systems Programmer">
   <meta property="og:description" content="Core contributor on Yellowstone Unleashed (80M+ visits), solo developer on Race Through Time, and systems engineer across nine shipped titles. Open for commissions.">
-  <meta name="theme-color" content="#08090a">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20rx='14'%20fill='%23c8f04a'/%3E%3Ctext%20x='32'%20y='42'%20font-family='ui-monospace,monospace'%20font-size='24'%20font-weight='700'%20fill='%230b0d05'%20text-anchor='middle'%3EA9%3C/text%3E%3C/svg%3E">
+  <meta name="theme-color" content="#000000">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Cdefs%3E%3ClinearGradient%20id='g'%20x1='0'%20y1='0'%20x2='1'%20y2='1'%3E%3Cstop%20offset='0'%20stop-color='%23ff5e6c'/%3E%3Cstop%20offset='1'%20stop-color='%23fa2d48'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width='64'%20height='64'%20rx='16'%20fill='url(%23g)'/%3E%3Ctext%20x='32'%20y='41'%20font-family='-apple-system,Helvetica,Arial,sans-serif'%20font-size='24'%20font-weight='700'%20fill='white'%20text-anchor='middle'%3EA9%3C/text%3E%3C/svg%3E">
 
   <!-- Apply the saved theme before first paint so there is no flash. -->
   <script>
@@ -23,178 +23,160 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
   <a class="skip-link" href="#work">Skip to content</a>
-  <div class="progress" id="progress" aria-hidden="true"></div>
+  <div class="ambient" aria-hidden="true"><i></i><i></i><i></i></div>
 
-  <header class="nav" id="nav">
-    <div class="nav-shell">
-      <a class="brand" href="#top" aria-label="Back to top">
-        <span class="brand-mark" id="brand-mark">A9</span>
-        <span class="brand-name" id="brand-name">AZ9tumas</span>
+  <div class="app">
+
+    <!-- ============ SIDEBAR (desktop) ============ -->
+    <aside class="sidebar glass" aria-label="Sidebar">
+      <a class="profile" href="#top">
+        <span class="avatar squircle" id="side-avatar">A9</span>
+        <span class="profile-text">
+          <b id="side-name">AZ9tumas</b>
+          <small><i class="live-dot" aria-hidden="true"></i><span id="side-avail">Open for commissions</span></small>
+        </span>
       </a>
-      <nav class="nav-links" id="nav-links" aria-label="Main navigation">
-        <a href="#work">Work</a>
-        <a href="#case-studies">Case studies</a>
-        <a href="#stack">Stack</a>
-        <a href="#about">About</a>
-        <a href="#contact">Contact</a>
+
+      <nav class="side-nav" aria-label="Main navigation">
+        <p class="side-label">Portfolio</p>
+        <a class="side-link" href="#top" data-spy="top"></a>
+        <a class="side-link" href="#work" data-spy="work"></a>
+        <a class="side-link" href="#videos" data-spy="videos"></a>
+        <a class="side-link" href="#stack" data-spy="stack"></a>
+        <a class="side-link" href="#about" data-spy="about"></a>
+        <a class="side-link" href="#contact" data-spy="contact"></a>
+
+        <p class="side-label">Projects</p>
+        <div id="side-projects"></div>
       </nav>
-      <div class="nav-actions">
-        <button class="icon-btn" id="theme-toggle" type="button" aria-label="Switch to light theme"></button>
-        <a href="#contact" class="btn btn-primary btn-sm nav-cta">Hire me</a>
-        <button class="burger" id="burger" type="button" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-links">
-          <span></span><span></span>
-        </button>
+
+      <div class="side-foot">
+        <button class="theme-btn" id="theme-toggle" type="button"></button>
       </div>
-    </div>
-  </header>
+    </aside>
 
-  <main id="top">
-    <noscript>
-      <style>.reveal{opacity:1 !important;transform:none !important;filter:none !important}</style>
-      <div class="noscript-box">
-        This portfolio needs JavaScript to render. In the meantime:
-        <a href="https://www.roblox.com/games/12054551325/Yellowstone-Unleashed">Yellowstone Unleashed</a> ·
-        <a href="https://discord.com/users/409297983734284288">Discord</a>
-      </div>
-    </noscript>
+    <!-- ============ CONTENT ============ -->
+    <main class="content" id="top">
+      <header class="topbar glass" id="topbar">
+        <span class="topbar-title" id="topbar-title">AZ9tumas</span>
+        <button class="icon-btn glass-btn" id="theme-toggle-m" type="button"></button>
+      </header>
 
-    <!-- ============ HERO ============ -->
-    <section class="hero" id="hero">
-      <canvas class="hero-canvas" id="stud-field" aria-hidden="true"></canvas>
-      <div class="hero-glow" aria-hidden="true"></div>
+      <noscript>
+        <div class="noscript-box">
+          This portfolio needs JavaScript to render. In the meantime:
+          <a href="https://www.roblox.com/games/12054551325/Yellowstone-Unleashed">Yellowstone Unleashed</a> ·
+          <a href="https://discord.com/users/409297983734284288">Discord</a>
+        </div>
+      </noscript>
 
-      <div class="container hero-grid">
-        <div class="hero-copy">
-          <span class="avail"><span class="pulse" aria-hidden="true"></span><span id="avail-text">Open for commissions</span></span>
-          <h1 id="hero-title"></h1>
-          <p class="hero-sub" id="hero-sub"></p>
-          <div class="hero-ctas">
-            <a href="#work" class="btn btn-primary btn-lg" id="hero-cta-work">View shipped work</a>
-            <a class="btn btn-ghost btn-lg" id="hero-cta-discord">Message on Discord</a>
+      <!-- Artist-page style header -->
+      <section class="artist" aria-labelledby="hero-name">
+        <div class="artist-art" id="artist-art" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+        <div class="artist-info">
+          <p class="artist-kicker" id="hero-kicker"></p>
+          <div class="artist-title-row">
+            <button class="play-btn" id="play-reel" type="button" aria-label="Play showreel"></button>
+            <h1 id="hero-name">AZ9tumas</h1>
+          </div>
+          <p class="artist-sub" id="hero-sub"></p>
+        </div>
+      </section>
+
+      <div class="stat-row" id="stats"></div>
+
+      <!-- ============ WORK ============ -->
+      <section class="block" id="work">
+        <div class="split">
+          <div class="split-feature">
+            <div class="shelf-head"><h2>Featured</h2></div>
+            <div id="featured-slot"></div>
+          </div>
+          <div class="split-list">
+            <div class="shelf-head"><h2>Credits</h2><span class="shelf-meta" id="credits-meta"></span></div>
+            <ol class="track-list" id="track-list"></ol>
+            <div id="more-note-slot"></div>
           </div>
         </div>
+      </section>
 
-        <div class="hero-visual" aria-hidden="true">
-          <div class="editor">
-            <div class="editor-bar">
-              <span class="editor-dots"><i></i><i></i><i></i></span>
-              <span class="editor-tab" id="editor-tab"></span>
-              <span class="editor-lang">Luau</span>
-            </div>
-            <pre class="editor-body" id="editor-body"><code id="editor-code"></code></pre>
-            <div class="editor-status">
-              <span><i class="status-dot"></i>Studio · Live</span>
-              <span>0 warnings</span>
-            </div>
-          </div>
-          <div class="float-chip chip-a" id="chip-a"></div>
-          <div class="float-chip chip-b" id="chip-b"></div>
-        </div>
-      </div>
-
-      <div class="container">
-        <div class="stats" id="stats"></div>
-      </div>
-    </section>
-
-    <div class="marquee" aria-hidden="true">
-      <div class="marquee-track" id="marquee"></div>
-    </div>
-
-    <!-- ============ SHIPPED WORK ============ -->
-    <section class="section" id="work">
-      <div class="container">
-        <header class="sec-head reveal">
-          <div class="sec-index"><span class="sec-num">01</span><span class="eyebrow">Selected work</span></div>
-          <h2>Production titles, <em>precise</em> credits.</h2>
-          <p class="sec-sub">Games with real players. Each card states exactly what I built — from core systems on an 80M-visit title to full refactors of live codebases.</p>
-        </header>
-        <div id="featured-slot"></div>
-        <div class="work-grid" id="work-grid"></div>
-        <div id="more-note-slot"></div>
-      </div>
-    </section>
-
-    <!-- ============ CASE STUDIES ============ -->
-    <section class="section section-alt" id="case-studies">
-      <div class="container">
-        <header class="sec-head reveal">
-          <div class="sec-index"><span class="sec-num">02</span><span class="eyebrow">Case studies &amp; footage</span></div>
-          <h2>Systems, <em>recorded</em> from real builds.</h2>
-          <p class="sec-sub">The featured study is my strongest end-to-end credit. Multi-part cards show one project at different stages — switch chapters inside the card.</p>
-        </header>
+      <!-- ============ VIDEOS ============ -->
+      <section class="block" id="videos">
+        <div class="shelf-head"><h2>Videos</h2><span class="shelf-meta">Recorded from real builds</span></div>
         <div id="cs-featured-slot"></div>
         <div id="cs-groups"></div>
-      </div>
-    </section>
+      </section>
 
-    <!-- ============ STACK ============ -->
-    <section class="section" id="stack">
-      <div class="container">
-        <header class="sec-head reveal">
-          <div class="sec-index"><span class="sec-num">03</span><span class="eyebrow">Stack</span></div>
-          <h2>The <em>foundations</em> behind the work.</h2>
-          <p class="sec-sub">Proven frameworks for architecture and data, and the disciplines I bring to every codebase.</p>
-        </header>
-        <div class="bento" id="bento"></div>
-      </div>
-    </section>
+      <!-- ============ STACK ============ -->
+      <section class="block" id="stack">
+        <div class="shelf-head"><h2>Essentials</h2><span class="shelf-meta">Frameworks I build on</span></div>
+        <div class="fw-row" id="fw-row"></div>
 
-    <!-- ============ ABOUT ============ -->
-    <section class="section section-alt" id="about">
-      <div class="container">
-        <header class="sec-head reveal">
-          <div class="sec-index"><span class="sec-num">04</span><span class="eyebrow">About</span></div>
-          <h2>The developer <em>behind</em> the credits.</h2>
-        </header>
-        <div class="about-grid">
-          <div class="about-copy reveal" id="about-copy"></div>
-          <ul class="facts reveal" id="about-facts"></ul>
+        <div class="shelf-head sub"><h2>Disciplines</h2></div>
+        <div class="tiles" id="skill-tiles"></div>
+      </section>
+
+      <!-- ============ ABOUT ============ -->
+      <section class="block" id="about">
+        <div class="shelf-head"><h2 id="about-title">About</h2></div>
+        <div class="about">
+          <div class="about-card glass-card" id="about-copy"></div>
+          <ul class="group-list" id="about-facts"></ul>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- ============ CONTACT ============ -->
-    <section class="section" id="contact">
-      <div class="container">
-        <div class="cta-panel reveal">
-          <div class="cta-glow" aria-hidden="true"></div>
-          <div class="sec-index"><span class="sec-num">05</span><span class="eyebrow">Contact</span></div>
-          <h2>Let's build something players <em>remember</em>.</h2>
-          <p class="cta-sub" id="contact-copy"></p>
-          <div class="cta-actions" id="contact-actions"></div>
-          <div class="email-zone" id="email-zone"></div>
-          <div class="cta-foot" id="contact-foot"></div>
+      <!-- ============ CONTACT ============ -->
+      <section class="block" id="contact">
+        <div class="shelf-head"><h2>Get in touch</h2></div>
+        <div class="contact">
+          <div class="contact-lead">
+            <p class="contact-big">Let's build something players remember.</p>
+            <p class="contact-copy" id="contact-copy"></p>
+          </div>
+          <ul class="group-list" id="contact-list"></ul>
         </div>
-      </div>
-    </section>
-  </main>
+      </section>
 
-  <footer class="footer">
-    <div class="container">
-      <div class="foot-row">
-        <div class="foot-left">
-          <span class="foot-name" id="foot-name">AZ9tumas</span>
-          <span class="foot-tag" id="foot-tag">Roblox Gameplay &amp; Systems Programmer</span>
-        </div>
-        <nav class="foot-links" aria-label="Footer navigation">
-          <a href="#work">Work</a>
-          <a href="#case-studies">Case studies</a>
-          <a href="#stack">Stack</a>
-          <a href="#contact">Contact</a>
-        </nav>
-        <a class="to-top" href="#top" id="to-top">Back to top</a>
-      </div>
-      <div class="wordmark" id="wordmark" aria-hidden="true">AZ9tumas</div>
-      <div class="foot-copy">© <span id="foot-year">2026</span> <span id="foot-name-2">AZ9tumas</span>. All rights reserved.</div>
-    </div>
-  </footer>
+      <footer class="footer">
+        <span>© <span id="foot-year">2026</span> <span id="foot-name">AZ9tumas</span></span>
+        <span id="foot-tag">Roblox Gameplay &amp; Systems Programmer</span>
+      </footer>
+    </main>
+  </div>
+
+  <!-- ============ MINI PLAYER (floating glass) ============ -->
+  <div class="player glass" id="player" role="region" aria-label="Availability">
+    <span class="player-art squircle" id="player-art" aria-hidden="true"></span>
+    <span class="player-text">
+      <b id="player-title">Open for commissions</b>
+      <small id="player-sub">AZ9tumas · Discord DM is fastest</small>
+    </span>
+    <span class="player-ctl">
+      <a class="ctl" id="player-mail" href="#contact" aria-label="Email"></a>
+      <a class="ctl ctl-main" id="player-discord" aria-label="Message on Discord"></a>
+    </span>
+    <span class="player-progress" aria-hidden="true"><i id="player-bar"></i></span>
+  </div>
+
+  <!-- ============ TAB BAR (mobile) ============ -->
+  <nav class="tabbar glass" id="tabbar" aria-label="Sections">
+    <a href="#top" data-spy="top"></a>
+    <a href="#work" data-spy="work"></a>
+    <a href="#videos" data-spy="videos"></a>
+    <a href="#stack" data-spy="stack"></a>
+    <a href="#contact" data-spy="contact"></a>
+  </nav>
+
+  <!-- ============ PROJECT SHEET ============ -->
+  <dialog class="sheet" id="sheet" aria-labelledby="sheet-title">
+    <div class="sheet-body" id="sheet-body"></div>
+  </dialog>
 
   <script src="config.js"></script>
   <script src="js/main.js"></script>
