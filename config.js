@@ -166,8 +166,9 @@ window.PORTFOLIO_CONFIG = {
       slug: "gun-system",
       title: "Gun System",
       summary:
-        "A production-ready gun framework — equip, fire and reload flow " +
-        "with recoil, effects and responsive feedback.",
+        "A production-ready gun framework inspired by the Roblox game " +
+        "Rivals. Equip, fire and reload flow with recoil, effects and " +
+        "responsive feedback.",
       parts: [{ label: "Watch", id: "j3AZ4PPkTJM" }],
     },
     {
