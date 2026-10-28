@@ -218,7 +218,7 @@ window.PORTFOLIO_CONFIG = {
       summary:
         "A production-ready gun framework — equip, fire and reload flow " +
         "with recoil, effects and responsive feedback.",
-      parts: [{ label: "Watch", id: "RCdd1NCaIw4" }],
+      parts: [{ label: "Watch", id: "j3AZ4PPkTJM" }],
     },
   ],
 
