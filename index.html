@@ -30,74 +30,98 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <a class="skip-link" href="#content">Skip to content</a>
+  <a class="skip-link" href="#work">Skip to content</a>
 
   <!-- ============ HEADER ============ -->
-  <header class="header">
-    <div class="header-inner">
-      <button class="icon-btn menu-btn" id="menu-btn" type="button" aria-label="Open navigation" aria-controls="sidebar" aria-expanded="false"></button>
-      <a class="brand" href="#/" aria-label="Home">
+  <header class="header" id="header">
+    <div class="wrap header-inner">
+      <a class="brand" href="#top">
         <span class="brand-mark" id="brand-mark">A9</span>
         <span class="brand-name" id="brand-name">AZ9tumas</span>
-        <span class="brand-tag">Portfolio</span>
       </a>
-
-      <button class="search-btn" id="search-btn" type="button" aria-haspopup="dialog">
-        <span class="search-btn-icon" id="search-btn-icon"></span>
-        <span class="search-btn-label">Search…</span>
-        <kbd class="search-kbd" id="search-kbd">⌘K</kbd>
-      </button>
-
-      <nav class="header-nav" aria-label="Primary">
-        <a href="#/credits" data-nav="credits">Work</a>
-        <a href="#/engineering/architecture" data-nav="engineering">Engineering</a>
-        <a href="#/about" data-nav="about">About</a>
+      <nav class="nav" id="nav" aria-label="Sections">
+        <a href="#work">Games</a>
+        <a href="#showcases">Showcases</a>
+        <a href="#code">How I build</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
       </nav>
-
       <div class="header-actions">
         <button class="icon-btn" id="theme-btn" type="button"></button>
-        <a class="btn btn-primary btn-sm" href="#/contact">Hire me</a>
+        <a class="btn btn-primary btn-sm" href="#contact">Hire me</a>
+        <button class="icon-btn menu-btn" id="menu-btn" type="button" aria-label="Open menu" aria-controls="nav" aria-expanded="false"></button>
       </div>
     </div>
   </header>
 
-  <div class="layout">
-    <!-- ============ SIDEBAR ============ -->
-    <aside class="sidebar" id="sidebar" aria-label="Documentation">
-      <nav class="sidebar-nav" id="sidebar-nav"></nav>
-      <div class="sidebar-foot" id="sidebar-foot"></div>
-    </aside>
-    <div class="scrim" id="scrim" hidden></div>
-
-    <!-- ============ CONTENT ============ -->
-    <main class="main" id="content" tabindex="-1">
-      <noscript>
-        <div class="prose">
-          <h1>AZ9tumas</h1>
-          <p>This portfolio needs JavaScript to render. In the meantime:
-            <a href="https://www.roblox.com/games/12054551325/Yellowstone-Unleashed">Yellowstone Unleashed</a> ·
-            <a href="https://discord.com/users/409297983734284288">Discord</a></p>
-        </div>
-      </noscript>
-      <article class="doc" id="doc"></article>
-    </main>
-
-    <!-- ============ ON THIS PAGE ============ -->
-    <aside class="toc" id="toc" aria-label="On this page"></aside>
-  </div>
-
-  <!-- ============ SEARCH ============ -->
-  <dialog class="search" id="search" aria-label="Search">
-    <div class="search-box">
-      <div class="search-field">
-        <span class="search-field-icon" id="search-field-icon"></span>
-        <input id="search-input" type="search" placeholder="Search pages and sections" autocomplete="off" spellcheck="false" aria-controls="search-results">
-        <kbd>Esc</kbd>
+  <main id="top">
+    <noscript>
+      <div class="wrap noscript">
+        This portfolio needs JavaScript to render. In the meantime:
+        <a href="https://www.roblox.com/games/12054551325/Yellowstone-Unleashed">Yellowstone Unleashed</a> ·
+        <a href="https://discord.com/users/409297983734284288">Discord</a>
       </div>
-      <ul class="search-results" id="search-results" role="listbox"></ul>
-      <div class="search-foot"><span><kbd>↑</kbd><kbd>↓</kbd> to navigate</span><span><kbd>↵</kbd> to open</span></div>
-    </div>
-  </dialog>
+    </noscript>
+
+    <!-- 1. Who -->
+    <section class="hero">
+      <div class="wrap" id="hero"></div>
+    </section>
+
+    <!-- 2. Games -->
+    <section class="section" id="work">
+      <div class="wrap">
+        <header class="section-head">
+          <h2>Games I've worked on</h2>
+          <p>Shipped Roblox titles with real players. Each one says exactly what I was responsible for.</p>
+        </header>
+        <div class="projects" id="projects"></div>
+        <p class="more" id="more"></p>
+      </div>
+    </section>
+
+    <!-- 3. Showcases -->
+    <section class="section" id="showcases">
+      <div class="wrap">
+        <header class="section-head">
+          <h2>Systems in action</h2>
+          <p>Recorded from real builds. Press play to watch here.</p>
+        </header>
+        <div class="showcases" id="showcase-list"></div>
+      </div>
+    </section>
+
+    <!-- 4. Code -->
+    <section class="section" id="code">
+      <div class="wrap">
+        <header class="section-head">
+          <h2>How I build</h2>
+          <p id="code-intro"></p>
+        </header>
+        <div class="principles" id="principles"></div>
+        <div class="code-viewer" id="code-viewer"></div>
+      </div>
+    </section>
+
+    <!-- 5. About -->
+    <section class="section" id="about">
+      <div class="wrap">
+        <header class="section-head"><h2>About</h2></header>
+        <div class="about" id="about-body"></div>
+      </div>
+    </section>
+
+    <!-- 6. Contact -->
+    <section class="section" id="contact">
+      <div class="wrap">
+        <div class="contact" id="contact-body"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer-inner" id="footer"></div>
+  </footer>
 
   <script src="config.js"></script>
   <script src="js/main.js"></script>

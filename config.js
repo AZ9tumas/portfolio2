@@ -1,13 +1,12 @@
 /* ==========================================================================
    PORTFOLIO CONFIG — the only file you need to edit.
    ==========================================================================
-   The site is laid out like product documentation. Every page is built
-   from this file: each project and case study gets its own page, and the
-   sidebar, search and "next / previous" links update automatically.
+   The site is one page, read top to bottom: intro, games, showcases,
+   "How I build" (code), about, contact. Everything is built from here.
 
-   Adding a shipped title -> append an object to `projects`.
-   Adding a system/video  -> append an object to `caseStudies`.
-   Code on the Engineering page -> edit `engineering.snippets`.
+   Adding a game           -> append an object to `projects`.
+   Adding a showcase video -> append an object to `caseStudies`.
+   Code examples           -> edit `engineering.snippets`.
 
    Text tokens usable in any string:
      {name}   -> profile.displayName
@@ -32,14 +31,14 @@ window.PORTFOLIO_CONFIG = {
     startYear: 2021,
     availability: "Open for commissions",
 
-    // First paragraph on the Introduction page.
+    // Paragraph under your name at the top of the page.
     intro:
       "Gameplay and systems programmer for Roblox. {years} years of production " +
       "work across nine shipped titles — from the movement system behind " +
       "Yellowstone Unleashed (80M+ visits) to full-stack solo builds like " +
       "Race Through Time.",
 
-    // Stat cards on the Introduction page. Keep labels honest about scope.
+    // Stat cards at the top of the page. Keep labels honest about scope.
     stats: [
       { value: "80M+",  label: "Visits", note: "Yellowstone Unleashed" },
       { value: "~2.5K", label: "Peak concurrent players", note: "Build an Igloo" },
@@ -60,7 +59,7 @@ window.PORTFOLIO_CONFIG = {
       "clean, profiled Luau throughout.",
     ],
 
-    // Rendered as a key/value table on the About page.
+    // Shown as a list next to the About text.
     facts: [
       { key: "Focus",      value: "Gameplay systems, client–server architecture, player data" },
       { key: "Experience", value: "Professional Roblox development since 2021" },
@@ -85,9 +84,9 @@ window.PORTFOLIO_CONFIG = {
   },
 
   /* ------------------------------------------------------------------
-     3. SHIPPED TITLES — one documentation page each
+     3. GAMES — one card each in "Games I've worked on"
      ------------------------------------------------------------------
-     slug         (required) URL id, e.g. #/projects/build-an-igloo
+     slug         (required) unique id; footage can point at it
      title, url, role, summary (required)
      stats        optional { visits: "80M+", concurrents: "~2.5K" }
      status       optional e.g. "Live", "Sold"
@@ -145,23 +144,22 @@ window.PORTFOLIO_CONFIG = {
     },
   ],
 
-  // Shown under the credits table.
+  // Shown under the games list.
   additionalContributions:
-    "Beyond the credits above, I've contributed systems and features to " +
-    "five-plus additional shipped titles for studios and clients.",
+    "Beyond the games above, I've also built systems and features for " +
+    "five-plus other shipped titles for studios and clients.",
 
   /* ------------------------------------------------------------------
-     4. CASE STUDIES & FOOTAGE — one page each, unless `project` is set
+     4. SHOWCASES — "Systems in action" videos, in this order
      ------------------------------------------------------------------
      slug, title, summary, parts (required)
      parts     list of { label, id } — id is the part after "watch?v=" or
                "youtu.be/" in the YouTube URL. Two or more parts render
                as one player with chapter tabs.
-     project   optional slug of a shipped title: the footage is shown on
-               that title's page instead of getting its own page.
+     project   optional slug of a game: the video is shown on that game's
+               card instead of under "Systems in action".
      role, highlights, note   optional
-     featured  true on one entry = linked from the Introduction page
-     Order here is the order in the sidebar and on the Credits page.
+     Order here is the order on the page.
      ------------------------------------------------------------------ */
   caseStudies: [
     {
@@ -175,7 +173,6 @@ window.PORTFOLIO_CONFIG = {
     {
       slug: "race-through-time",
       title: "Race Through Time",
-      featured: true,          // linked from the Introduction page
       role: "Solo Developer — Full Stack",
       summary:
         "My strongest end-to-end credit. I scripted the entire game — every " +
@@ -226,7 +223,7 @@ window.PORTFOLIO_CONFIG = {
   ],
 
   /* ------------------------------------------------------------------
-     5. ENGINEERING — the "Architecture" page
+     5. HOW I BUILD — principles and the tabbed code viewer
      ------------------------------------------------------------------
      These snippets are representative examples of the patterns used, not
      code lifted from a client project. Replace them with your own
