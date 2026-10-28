@@ -204,6 +204,7 @@
     desc: C.profile.tagline,
     render: () => {
       const featured = projects.slice(0, 3);
+      const caseStudy = systems.find((s) => s.featured) || systems[0];
       return (
         '<p class="breadcrumb">Getting started</p>' +
         "<h1>" + esc(C.profile.displayName) + "</h1>" +
@@ -218,7 +219,7 @@
         "<p>These docs cover the games I've shipped, the systems I've built and how I structure code. Every page states the exact scope of my contribution.</p>" +
         cards([
           { href: "#/credits", icon: "list", title: "Credits", desc: "Every shipped title and system, with my role on each." },
-          { href: "#/systems/" + (systems[0] ? systems[0].slug : ""), icon: "play", title: systems[0] ? systems[0].title : "Systems", desc: systems[0] ? "Case study — " + (systems[0].role || "recorded footage") + "." : "" },
+          { href: "#/systems/" + (caseStudy ? caseStudy.slug : ""), icon: "play", title: caseStudy ? caseStudy.title : "Systems", desc: caseStudy ? "Case study — " + (caseStudy.role || "recorded footage") + "." : "" },
           { href: "#/engineering/architecture", icon: "code", title: "Architecture", desc: "The conventions I follow, with Luau examples." },
           { href: "#/contact", icon: "message", title: "Work with me", desc: "How to reach me and how a commission starts." },
         ]) +
