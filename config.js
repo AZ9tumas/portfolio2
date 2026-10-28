@@ -160,11 +160,22 @@ window.PORTFOLIO_CONFIG = {
      project   optional slug of a shipped title: the footage is shown on
                that title's page instead of getting its own page.
      role, highlights, note   optional
+     featured  true on one entry = linked from the Introduction page
+     Order here is the order in the sidebar and on the Credits page.
      ------------------------------------------------------------------ */
   caseStudies: [
     {
+      slug: "gun-system",
+      title: "Gun System",
+      summary:
+        "A production-ready gun framework — equip, fire and reload flow " +
+        "with recoil, effects and responsive feedback.",
+      parts: [{ label: "Watch", id: "j3AZ4PPkTJM" }],
+    },
+    {
       slug: "race-through-time",
       title: "Race Through Time",
+      featured: true,          // linked from the Introduction page
       role: "Solo Developer — Full Stack",
       summary:
         "My strongest end-to-end credit. I scripted the entire game — every " +
@@ -211,14 +222,6 @@ window.PORTFOLIO_CONFIG = {
         "stacking, drag-and-drop and hotbar, with clean client–server " +
         "synchronisation.",
       parts: [{ label: "Watch", id: "Rr014rk_zFA" }],
-    },
-    {
-      slug: "gun-system",
-      title: "Gun System",
-      summary:
-        "A production-ready gun framework — equip, fire and reload flow " +
-        "with recoil, effects and responsive feedback.",
-      parts: [{ label: "Watch", id: "j3AZ4PPkTJM" }],
     },
   ],
 
