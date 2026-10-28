@@ -1,24 +1,23 @@
 /* ==========================================================================
-   PORTFOLIO CONFIG — the ONLY file you need to edit.
+   PORTFOLIO CONFIG — the only file you need to edit.
    ==========================================================================
-   Everything on the site is rendered from this file. Save, refresh, done.
+   The site is laid out like product documentation. Every page is built
+   from this file: each project and case study gets its own page, and the
+   sidebar, search and "next / previous" links update automatically.
 
-   Wrap a word in *asterisks* in the hero headline to give it the accent
-   (serif italic) treatment.
+   Adding a shipped title -> append an object to `projects`.
+   Adding a system/video  -> append an object to `caseStudies`.
+   Code on the Engineering page -> edit `engineering.snippets`.
 
-   Adding a project  -> append an object to `projects`.
-   Adding a video    -> append an object to `caseStudies`.
-   No HTML/CSS/JS changes are ever required.
-
-   Available text tokens (usable in any string):
+   Text tokens usable in any string:
      {name}   -> profile.displayName
      {years}  -> years since profile.startYear (auto-computed)
 
-   CREDIT ACCURACY — read before editing roles:
-   Every project carries a `role` badge that states the exact scope of the
-   contribution ("Core Contributor", "Solo Developer", "Refactoring
-   Engineer", "Front-End Scripter", "Scripter"). Keep these truthful —
-   precise credit scope is a professionalism signal, not a limitation.
+   CREDIT ACCURACY
+   Every project carries a `role` that states the exact scope of the work
+   ("Core Contributor", "Solo Developer", "Refactoring Engineer",
+   "Front-End Scripter", "Scripter"). Keep these truthful — precise credit
+   scope is a professionalism signal, not a limitation.
    ========================================================================== */
 
 window.PORTFOLIO_CONFIG = {
@@ -28,23 +27,23 @@ window.PORTFOLIO_CONFIG = {
      ------------------------------------------------------------------ */
   profile: {
     displayName: "AZ9tumas",
-    monogram: "A9",                 // small mark in the navbar + favicon
+    monogram: "A9",
     tagline: "Roblox Gameplay & Systems Programmer",
-    startYear: 2021,                // {years} is computed from this
+    startYear: 2021,
     availability: "Open for commissions",
 
-    heroHeadline: "Gameplay systems for Roblox titles that *ship*.",
-    heroSub:
-      "{years} years of production work across nine shipped titles — from the " +
-      "movement system behind Yellowstone Unleashed (80M+ visits) to " +
-      "full-stack solo builds like Race Through Time.",
+    // First paragraph on the Introduction page.
+    intro:
+      "Gameplay and systems programmer for Roblox. {years} years of production " +
+      "work across nine shipped titles — from the movement system behind " +
+      "Yellowstone Unleashed (80M+ visits) to full-stack solo builds like " +
+      "Race Through Time.",
 
-    // Shown as a quiet stat band under the hero. Values are plain strings —
-    // keep the labels honest about credit scope.
-    heroStats: [
-      { value: "80M+",   label: "Visits — Yellowstone Unleashed" },
-      { value: "~2.5K",  label: "Peak CCU — Build an Igloo" },
-      { value: "9+",     label: "Shipped titles" },
+    // Stat cards on the Introduction page. Keep labels honest about scope.
+    stats: [
+      { value: "80M+",  label: "Visits", note: "Yellowstone Unleashed" },
+      { value: "~2.5K", label: "Peak concurrent players", note: "Build an Igloo" },
+      { value: "9+",    label: "Shipped titles", note: "Since 2021" },
     ],
 
     aboutParagraphs: [
@@ -61,13 +60,13 @@ window.PORTFOLIO_CONFIG = {
       "clean, profiled Luau throughout.",
     ],
 
-    // Icon names come from the built-in set: graduation-cap, calendar,
-    // layers, message-circle, credit-card, check, mail.
+    // Rendered as a key/value table on the About page.
     facts: [
-      { icon: "graduation-cap", text: "Computer Science & Engineering undergraduate" },
-      { icon: "calendar",       text: "Professional game development since 2021" },
-      { icon: "layers",         text: "9+ shipped titles across contributor, solo and refactor roles" },
-      { icon: "message-circle", text: "Fastest response via Discord DM" },
+      { key: "Focus",      value: "Gameplay systems, client–server architecture, player data" },
+      { key: "Experience", value: "Professional Roblox development since 2021" },
+      { key: "Credits",    value: "9+ shipped titles — contributor, solo and refactor roles" },
+      { key: "Education",  value: "Computer Science & Engineering (undergraduate)" },
+      { key: "Contact",    value: "Discord DM is fastest" },
     ],
   },
 
@@ -75,144 +74,125 @@ window.PORTFOLIO_CONFIG = {
      2. CONTACT
      ------------------------------------------------------------------
      The email address is stored split in two parts and is only assembled
-     in the browser when the "Reveal email" button is clicked — it never
-     appears in the page source or rendered DOM before that.
+     in the browser when "Reveal email" is clicked — it never appears in
+     the page source or the rendered page before that.
      ------------------------------------------------------------------ */
   contact: {
     discordUrl: "https://discord.com/users/409297983734284288",
-    emailUser: "rounakdas2025",     // part before the @
-    emailDomain: "gmail.com",       // part after the @
-    paymentNote: "Payment accepted via PayPal or Robux.",
+    emailUser: "az9tumas2025",   // part before the @
+    emailDomain: "gmail.com",    // part after the @
+    paymentNote: "PayPal or Robux",
   },
 
   /* ------------------------------------------------------------------
-     3. PROJECTS — append an object to add a project card.
+     3. SHIPPED TITLES — one documentation page each
      ------------------------------------------------------------------
-     Fields:
-       title        (required) game name
-       url          (required) Roblox game link
-       role         (required) exact credit-scope badge text
-       contribution (required) 1–3 sentences stating precisely what you did
-       stats        optional  { visits: "80M+", concurrents: "1,000+" }
-       tags         optional  short keywords
-       image        optional  path to a screenshot, e.g. "assets/igloo.jpg";
-                    without one the card gets generated album-style art
-       art          optional  four colours for the generated album-style
-                    cover, e.g. ["#f4a259", "#e76f51", "#264653", "#2a9d8f"]
-       featured     true on ONE project = renders as the large lead card
-       caseStudyAnchor true = adds a "Development footage" link that jumps
-                    to the case-studies section
+     slug         (required) URL id, e.g. #/projects/build-an-igloo
+     title, url, role, summary (required)
+     stats        optional { visits: "80M+", concurrents: "~2.5K" }
+     status       optional e.g. "Live", "Sold"
+     tags         optional short keywords
+     highlights   optional bullet points about what you built
      ------------------------------------------------------------------ */
   projects: [
     {
+      slug: "yellowstone-unleashed",
       title: "Yellowstone Unleashed",
       url: "https://www.roblox.com/games/12054551325/Yellowstone-Unleashed",
       role: "Core Contributor",
-      contribution:
+      status: "Live",
+      summary:
         "Contributed core gameplay systems to this open-world dinosaur " +
         "survival title — primarily the player movement system that every " +
         "session runs on. The game has passed 80 million visits and is " +
         "still climbing.",
       stats: { visits: "80M+" },
       tags: ["Open world", "Survival", "Movement systems"],
-      art: ["#f4a259", "#e76f51", "#1b3a34", "#5a8f3d"],
-      featured: true,
     },
     {
+      slug: "build-an-igloo",
       title: "Build an Igloo",
       url: "https://www.roblox.com/games/131921967019798/Build-an-Igloo",
       role: "Scripter",
-      contribution:
+      status: "Sold",
+      summary:
         "Scripter on this title before it was sold to new owners. The game " +
         "peaked at around 2,500 concurrent players.",
-      tags: ["Building"],
       stats: { concurrents: "~2.5K" },
-      art: ["#e0f2fe", "#7dd3fc", "#1e3a8a", "#38bdf8"],
+      tags: ["Building"],
     },
     {
+      slug: "catch-lucky-blocks",
       title: "Catch Lucky Blocks",
       url: "https://www.roblox.com/games/134074745511140/Catch-Lucky-Blocks",
       role: "Refactoring Engineer",
-      contribution:
+      status: "Live",
+      summary:
         "Brought in on an existing codebase — not the original scripter — to " +
         "carry out a major refactor across both the front end and back end, " +
         "improving structure, reliability and maintainability of a live game.",
       tags: ["Systems refactor", "Live codebase"],
-      art: ["#ffd60a", "#ff7b00", "#9d0208", "#ffb703"],
     },
     {
+      slug: "my-mutant-anime",
       title: "My Mutant Anime",
       url: "https://www.roblox.com/games/87137064532509/My-Mutant-Anime",
       role: "Front-End Scripter",
-      contribution:
+      summary:
         "Scripted the front end of this anime collector title — client-side " +
         "gameplay flow, UI and presentation.",
       tags: ["Collector", "UI & client systems"],
-      art: ["#ff99c8", "#f72585", "#240046", "#7209b7"],
-      caseStudyAnchor: true,
     },
   ],
 
-  // Quiet footnote row under the project grid.
-  additionalContributions: {
-    count: "5+",
-    note:
-      "Beyond the credits above, contributed systems and features to " +
-      "five-plus additional shipped titles for studios and clients.",
-  },
+  // Shown under the credits table.
+  additionalContributions:
+    "Beyond the credits above, I've contributed systems and features to " +
+    "five-plus additional shipped titles for studios and clients.",
 
   /* ------------------------------------------------------------------
-     4. CASE STUDIES & FOOTAGE — append an object to add a video.
+     4. CASE STUDIES & FOOTAGE — one page each, unless `project` is set
      ------------------------------------------------------------------
-     Fields:
-       title     (required) card title
-       category  (required) group heading; entries with the same category
-                 render together under one label (order follows this file)
-       summary   (required) what the viewer is looking at
-       parts     (required) list of { label, id } — id is the part after
-                 "watch?v=" or "youtu.be/" in the YouTube URL.
-                 TWO OR MORE parts = the card renders as one cohesive unit
-                 with a chapter switcher (never two separate tiles).
-       role      optional credit-scope badge (only where credit is defined)
-       note      optional small caption under multi-part cards
-       featured  true on ONE entry = large flagship case-study treatment
-       highlights optional bullet list, shown on the featured entry
+     slug, title, summary, parts (required)
+     parts     list of { label, id } — id is the part after "watch?v=" or
+               "youtu.be/" in the YouTube URL. Two or more parts render
+               as one player with chapter tabs.
+     project   optional slug of a shipped title: the footage is shown on
+               that title's page instead of getting its own page.
+     role, highlights, note   optional
      ------------------------------------------------------------------ */
   caseStudies: [
     {
+      slug: "race-through-time",
       title: "Race Through Time",
-      category: "Featured case study",
       role: "Solo Developer — Full Stack",
       summary:
-        "The strongest end-to-end credit in this portfolio. I scripted the " +
-        "entire game — every front-end and back-end system, from the " +
-        "gameplay loop and data layer up to the cinematic VFX shown in " +
-        "this reel.",
+        "My strongest end-to-end credit. I scripted the entire game — every " +
+        "front-end and back-end system, from the gameplay loop and data " +
+        "layer up to the cinematic VFX shown in this reel.",
       highlights: [
         "Full gameplay loop — front end and back end, solo",
         "Server architecture and data persistence",
         "Cinematic VFX, timed sequences and screen feedback",
       ],
       parts: [{ label: "VFX & cinematics reel", id: "OZkQ9dOZD88" }],
-      featured: true,
     },
     {
+      slug: "my-mutant-anime-footage",
+      project: "my-mutant-anime",
       title: "My Mutant Anime",
-      category: "Title showcases",
       role: "Front-End Scripter",
       summary:
-        "Two development milestones of the shipped front end I scripted — " +
-        "switch chapters to see the UI and client-side flow evolve " +
-        "between builds.",
-      note: "One title, two builds — the chapters show the same front end at different stages.",
+        "Two development milestones of the shipped front end — switch " +
+        "chapters to see the UI and client-side flow evolve between builds.",
       parts: [
         { label: "Chapter 1", id: "xc1r7EwBPww" },
         { label: "Chapter 2", id: "v4KJQhiVFMY" },
       ],
     },
     {
+      slug: "dinosaur-survival",
       title: "Dinosaur Survival",
-      category: "Title showcases",
       summary:
         "A survival project shown at two stages of development — threats, " +
         "resources and the moment-to-moment loop, with Part 2 building " +
@@ -224,8 +204,8 @@ window.PORTFOLIO_CONFIG = {
       ],
     },
     {
+      slug: "inventory-system",
       title: "Minecraft-Style Inventory",
-      category: "Systems deep-dives",
       summary:
         "A Minecraft-style inventory rebuilt in Roblox — grid slots, " +
         "stacking, drag-and-drop and hotbar, with clean client–server " +
@@ -233,8 +213,8 @@ window.PORTFOLIO_CONFIG = {
       parts: [{ label: "Watch", id: "Rr014rk_zFA" }],
     },
     {
+      slug: "gun-system",
       title: "Gun System",
-      category: "Systems deep-dives",
       summary:
         "A production-ready gun framework — equip, fire and reload flow " +
         "with recoil, effects and responsive feedback.",
@@ -243,26 +223,222 @@ window.PORTFOLIO_CONFIG = {
   ],
 
   /* ------------------------------------------------------------------
-     5. FRAMEWORKS & SKILLS
+     5. ENGINEERING — the "Architecture" page
+     ------------------------------------------------------------------
+     These snippets are representative examples of the patterns used, not
+     code lifted from a client project. Replace them with your own
+     excerpts whenever you like — `lang` is "luau" or "text".
+     ------------------------------------------------------------------ */
+  engineering: {
+    intro:
+      "How I structure Roblox codebases: a small number of conventions, " +
+      "applied consistently, so systems stay easy to extend and safe to " +
+      "ship to a live game.",
+
+    principles: [
+      {
+        title: "Server-authoritative",
+        body: "Clients request; the server validates and decides. Currency, " +
+              "inventory and progression never trust client input.",
+      },
+      {
+        title: "One owner per system",
+        body: "Each system is a single Knit service (server) or controller " +
+              "(client) with a clear public surface — no shared global state.",
+      },
+      {
+        title: "Data integrity first",
+        body: "Player data goes through session-locked ProfileService " +
+              "profiles with a versioned template, so it can't duplicate or roll back.",
+      },
+      {
+        title: "Profiled, not guessed",
+        body: "Hot paths are measured with the MicroProfiler before and after " +
+              "changes; per-frame work stays off the server where possible.",
+      },
+    ],
+
+    layout: {
+      title: "Project layout",
+      file: "place structure",
+      lang: "text",
+      code: [
+        "ReplicatedStorage/",
+        "├─ Packages/            -- Knit, Promise, Signal",
+        "└─ Shared/              -- types, constants, pure modules",
+        "ServerScriptService/",
+        "├─ Services/            -- Knit services (server-authoritative)",
+        "└─ Runtime.server.lua   -- adds services, starts Knit",
+        "StarterPlayer/StarterPlayerScripts/",
+        "├─ Controllers/         -- Knit controllers (input, UI, camera)",
+        "└─ Runtime.client.lua   -- adds controllers, starts Knit",
+      ].join("\n"),
+    },
+
+    snippets: [
+      {
+        id: "services",
+        title: "Services",
+        description:
+          "A service owns one system on the server. The client can only call " +
+          "what's exposed under `Client`, and every change is validated server-side.",
+        file: "ServerScriptService/Services/CurrencyService.lua",
+        lang: "luau",
+        code: [
+          'local ReplicatedStorage = game:GetService("ReplicatedStorage")',
+          'local Knit = require(ReplicatedStorage.Packages.Knit)',
+          "",
+          "local CurrencyService = Knit.CreateService({",
+          '\tName = "CurrencyService",',
+          "\tClient = {",
+          "\t\tBalanceChanged = Knit.CreateSignal(),",
+          "\t},",
+          "})",
+          "",
+          "function CurrencyService:KnitStart()",
+          '\tself.DataService = Knit.GetService("DataService")',
+          "end",
+          "",
+          "-- Server-only: the client can never call this directly.",
+          "function CurrencyService:Grant(player: Player, amount: number)",
+          '\tassert(amount > 0, "amount must be positive")',
+          "\tlocal profile = self.DataService:GetProfile(player)",
+          "\tif not profile then",
+          "\t\treturn",
+          "\tend",
+          "",
+          "\tprofile.Data.Coins += amount",
+          "\tself.Client.BalanceChanged:Fire(player, profile.Data.Coins)",
+          "end",
+          "",
+          "function CurrencyService.Client:GetBalance(player: Player): number",
+          "\tlocal profile = self.Server.DataService:GetProfile(player)",
+          "\treturn if profile then profile.Data.Coins else 0",
+          "end",
+          "",
+          "return CurrencyService",
+        ].join("\n"),
+      },
+      {
+        id: "player-data",
+        title: "Player data",
+        description:
+          "Profiles are session-locked, reconciled against a template on load, " +
+          "and released when the player leaves — so data can't duplicate across servers.",
+        file: "ServerScriptService/Services/DataService.lua",
+        lang: "luau",
+        code: [
+          'local Players = game:GetService("Players")',
+          'local ServerStorage = game:GetService("ServerStorage")',
+          'local Knit = require(game:GetService("ReplicatedStorage").Packages.Knit)',
+          'local ProfileService = require(ServerStorage.Packages.ProfileService)',
+          "",
+          "local TEMPLATE = {",
+          "\tCoins = 0,",
+          "\tInventory = {},",
+          "\tVersion = 1,",
+          "}",
+          "",
+          "local DataService = Knit.CreateService({ Name = \"DataService\" })",
+          'local store = ProfileService.GetProfileStore("PlayerData", TEMPLATE)',
+          "local profiles = {}",
+          "",
+          "local function onPlayerAdded(player: Player)",
+          '\tlocal profile = store:LoadProfileAsync("Player_" .. player.UserId)',
+          "\tif not profile then",
+          '\t\tplayer:Kick("Your data failed to load. Please rejoin.")',
+          "\t\treturn",
+          "\tend",
+          "",
+          "\tprofile:AddUserId(player.UserId)",
+          "\tprofile:Reconcile()",
+          "\tprofile:ListenToRelease(function()",
+          "\t\tprofiles[player] = nil",
+          '\t\tplayer:Kick("Your data was loaded on another server.")',
+          "\tend)",
+          "",
+          "\tif player:IsDescendantOf(Players) then",
+          "\t\tprofiles[player] = profile",
+          "\telse",
+          "\t\tprofile:Release()",
+          "\tend",
+          "end",
+          "",
+          "function DataService:GetProfile(player: Player)",
+          "\treturn profiles[player]",
+          "end",
+          "",
+          "function DataService:KnitInit()",
+          "\tfor _, player in Players:GetPlayers() do",
+          "\t\ttask.spawn(onPlayerAdded, player)",
+          "\tend",
+          "\tPlayers.PlayerAdded:Connect(onPlayerAdded)",
+          "\tPlayers.PlayerRemoving:Connect(function(player)",
+          "\t\tlocal profile = profiles[player]",
+          "\t\tif profile then",
+          "\t\t\tprofile:Release()",
+          "\t\tend",
+          "\tend)",
+          "end",
+          "",
+          "return DataService",
+        ].join("\n"),
+      },
+      {
+        id: "controllers",
+        title: "Controllers",
+        description:
+          "Controllers own client behaviour. They talk to services through " +
+          "Knit's networking, which returns promises — no raw RemoteEvents to manage.",
+        file: "StarterPlayerScripts/Controllers/HudController.lua",
+        lang: "luau",
+        code: [
+          'local ReplicatedStorage = game:GetService("ReplicatedStorage")',
+          'local Knit = require(ReplicatedStorage.Packages.Knit)',
+          "",
+          'local HudController = Knit.CreateController({ Name = "HudController" })',
+          "",
+          "function HudController:KnitStart()",
+          '\tlocal CurrencyService = Knit.GetService("CurrencyService")',
+          "",
+          "\tCurrencyService:GetBalance():andThen(function(coins)",
+          "\t\tself:SetCoins(coins)",
+          "\tend)",
+          "",
+          "\tCurrencyService.BalanceChanged:Connect(function(coins)",
+          "\t\tself:SetCoins(coins)",
+          "\tend)",
+          "end",
+          "",
+          "function HudController:SetCoins(coins: number)",
+          "\t-- update the HUD label, play a count-up tween, etc.",
+          "end",
+          "",
+          "return HudController",
+        ].join("\n"),
+      },
+    ],
+  },
+
+  /* ------------------------------------------------------------------
+     6. TOOLKIT
      ------------------------------------------------------------------ */
   frameworks: [
     {
       name: "Knit",
       tagline: "Game architecture",
-      art: ["#a5b4fc", "#6366f1", "#1e1b4b", "#818cf8"],
       url: "https://sleitnick.github.io/Knit/",
       description:
-        "Backbone for structured, maintainable codebases — Services on the " +
-        "server, Controllers on the client, and clean networking in between.",
+        "Services on the server, controllers on the client, and clean " +
+        "networking in between.",
     },
     {
       name: "ProfileService",
       tagline: "Data persistence",
-      art: ["#86efac", "#22c55e", "#052e16", "#4ade80"],
       url: "https://madstudioroblox.github.io/ProfileService/",
       description:
         "Session-locked player profiles that prevent duplication and data " +
-        "loss at scale — the standard for safe player data on Roblox.",
+        "loss at scale.",
     },
   ],
 
@@ -280,7 +456,7 @@ window.PORTFOLIO_CONFIG = {
   ],
 
   /* ------------------------------------------------------------------
-     6. SEO — browser tab title & search-engine description
+     7. SEO — browser tab title & search-engine description
      ------------------------------------------------------------------ */
   seo: {
     title: "AZ9tumas — Roblox Gameplay & Systems Programmer",
