@@ -42,6 +42,26 @@ window.PORTFOLIO_CONFIG = {
         alt: "Cutaway overview of the modular garage, showing parking decks, connecting routes and the central spiral ramp.",
         caption: "03 / Complex overview",
       },
+      {
+        src: "assets/stygian/rotunda-cutaway.jpg",
+        alt: "Cutaway of the spiral rotunda showing its stacked vehicle ramps and connections to the surrounding parking decks.",
+        caption: "04 / Rotunda cutaway",
+      },
+      {
+        src: "assets/stygian/vintage-taxi.jpg",
+        alt: "Black and yellow vintage taxi with round headlights, chrome trim and a roof rack, presented under studio lighting.",
+        caption: "05 / Vintage taxi",
+      },
+      {
+        src: "assets/stygian/windscreen-note.jpg",
+        alt: "A handwritten note on the taxi windscreen directs the player to the service bay breaker after the lift stops.",
+        caption: "06 / A note left behind",
+      },
+      {
+        src: "assets/stygian/modular-kit.jpg",
+        alt: "Nine reusable basement sections displayed separately, including parking bays, walls, a bridge, stairs and a curved ramp.",
+        caption: "07 / Modular environment kit",
+      },
     ],
   },
 
