@@ -21,6 +21,30 @@
 
 window.PORTFOLIO_CONFIG = {
 
+  // Featured images appear directly below the hero stats.
+  featuredGallery: {
+    title: "Stygian — Basement",
+    description: "A quiet arrival into an underground parking complex, connected by a multi-level spiral ramp.",
+    note: "Blender environment renders · Development study",
+    images: [
+      {
+        src: "assets/stygian/arrival.jpg",
+        alt: "View from the lift into Stygian's concrete basement garage, with parked vintage cars and fluorescent lighting.",
+        caption: "01 / Lift arrival",
+      },
+      {
+        src: "assets/stygian/spiral-court.jpg",
+        alt: "A curved vehicle ramp winding around the central concrete column of the multi-level spiral court.",
+        caption: "02 / Spiral court",
+      },
+      {
+        src: "assets/stygian/complex-overview.jpg",
+        alt: "Cutaway overview of the modular garage, showing parking decks, connecting routes and the central spiral ramp.",
+        caption: "03 / Complex overview",
+      },
+    ],
+  },
+
   /* ------------------------------------------------------------------
      1. IDENTITY
      ------------------------------------------------------------------ */

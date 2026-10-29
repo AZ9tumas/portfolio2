@@ -131,6 +131,26 @@
         esc(s.label) + '</div><div class="stat-note">' + esc(s.note || "") + "</div></div>").join("") + "</div>";
   }
 
+  function renderFeaturedGallery() {
+    const gallery = C.featuredGallery;
+    if (!gallery || !gallery.images || !gallery.images.length) return;
+    $("#hero").insertAdjacentHTML("beforeend",
+      '<section class="featured-gallery" aria-labelledby="featured-title">' +
+        '<header class="featured-head"><p class="featured-label">Featured environment</p>' +
+        '<h2 id="featured-title">' + esc(gallery.title) + '</h2>' +
+        '<p class="featured-description">' + text(gallery.description || "") + '</p></header>' +
+        '<div class="featured-images">' + gallery.images.map((item, i) =>
+          '<figure class="featured-image' + (i === 0 ? ' featured-image-lead' : '') + '">' +
+            '<a href="' + esc(item.src) + '" target="_blank" rel="noopener noreferrer" aria-label="' +
+              esc("View full-size image: " + item.caption) + '">' +
+              '<img src="' + esc(item.src) + '" alt="' + esc(item.alt) + '" width="1800" height="1125" ' +
+              'loading="' + (i === 0 ? 'eager' : 'lazy') + '" decoding="async"></a>' +
+            '<figcaption>' + esc(item.caption) + '</figcaption></figure>'
+        ).join("") + '</div>' +
+        '<p class="featured-note">' + esc(gallery.note || "") + '</p>' +
+      '</section>');
+  }
+
   function renderProjects() {
     $("#projects").innerHTML = C.projects.map((p) => {
       const s = p.stats || {};
@@ -337,6 +357,7 @@
   /* ---------- boot ---------- */
   try {
     renderHero();
+    renderFeaturedGallery();
     renderProjects();
     renderShowcases();
     renderCode();

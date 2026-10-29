@@ -237,6 +237,21 @@ p code {
 .stat-label { margin-top: 4px; color: var(--text); font-size: 14px; font-weight: 500; line-height: 1.4; }
 .stat-note { color: var(--text-3); font-size: 13.5px; line-height: 1.4; }
 
+/* ---------- featured environment ---------- */
+.featured-gallery { margin-top: 40px; }
+.featured-head { margin-bottom: 20px; }
+.featured-label { margin-bottom: 8px; color: var(--text-3); font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; }
+.featured-head h2 { font-size: clamp(24px, 3.5vw, 32px); font-weight: 600; }
+.featured-description { max-width: 640px; margin-top: 10px; color: var(--text-2); font-size: 15.5px; }
+.featured-images { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+.featured-image { min-width: 0; }
+.featured-image-lead { grid-column: 1 / -1; }
+.featured-image a { display: block; border-radius: var(--radius); overflow: hidden; background: var(--bg-muted); }
+.featured-image img { width: 100%; height: auto; aspect-ratio: 8 / 5; }
+.featured-image a:hover { outline: 2px solid var(--border-strong); outline-offset: 3px; }
+.featured-image figcaption { margin-top: 10px; color: var(--text-2); font-family: var(--mono); font-size: 12px; }
+.featured-note { margin-top: 16px; color: var(--text-3); font-size: 13px; }
+
 /* ---------- 2. games ---------- */
 .projects { display: flex; flex-direction: column; gap: 14px; }
 .project {
@@ -512,6 +527,7 @@ p code {
   .project-top { flex-direction: column; gap: 10px; }
   .project-metric { text-align: left; }
   .showcases, .principles { grid-template-columns: 1fr; }
+  .featured-images { grid-template-columns: 1fr; }
   .contact { padding: 22px 18px; }
   .code pre { font-size: 12px; }
 }

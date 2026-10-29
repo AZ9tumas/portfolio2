@@ -8,6 +8,7 @@ Everything is rendered from **[config.js](config.js)** — you never need to tou
 
 | What | Where in config.js |
 |---|---|
+| Featured Stygian images below the stats, captions and description | `featuredGallery` — image files live in `assets/stygian/` |
 | Name, tagline, intro paragraph, stat cards, about text, facts list | `profile` |
 | Discord, email, payment note | `contact` — the email is stored split as `emailUser` + `emailDomain` and only assembled in the browser when "Show" is clicked |
 | Games (one card each) | `projects` — needs a unique `slug`; optional `stats`, `status`, `tags` |
